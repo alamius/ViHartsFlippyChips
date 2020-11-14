@@ -482,8 +482,7 @@ void Chip::color(
         LC->write(filename+"_layer"+_to_str(e_LC), *write_bg_color);
         LC->clear();
     }
-    delete LC;
-    LC = new LayeredCanvas();
+    LC->clear();
     if(dbg_file_lvl >= 2) std::cout << "adding image layers together:" << '\n';
     LC->dump(filename+"0_bg");
     for(int bc = 0; bc < LC_len; bc++){
@@ -491,11 +490,13 @@ void Chip::color(
         LC->dump(filename+_to_str(bc+1)+"_loaded");
     }
     LC->save(filename+"_added", std_alpha_map);
-    LC->clear();
-    LC->background(0, 64, 0, 255);
-    LC->load(filename+"_added");
-    LC->write(filename);
-    LC->dump(filename);
+    delete LC;
+    BC = new BasicCanvas();
+    BC->background(0, 64, 0, 255);
+    BC->load(filename+"_added");
+    BC->write(filename);
+    BC->dump(filename);
+    delete BC;
 }
 std::vector<Vector> Chip::intersect(){
     if(dbg_file_lvl >= 4) std::cout << "intersections of:" << '\n';
