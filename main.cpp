@@ -8,7 +8,7 @@
 
 //own
 #include <Vector.h>
-static int dbg_file_lvl = 3;
+static int dbg_file_lvl = 0;
 #include <utils.random.h>
 // #include <graphics.utils.h>
 // #include <mouse.h>
@@ -31,8 +31,10 @@ int main(int argc, char const *argv[]){
     colors_init();
     make_kernel_gauss();
     write_bg_color = &DARKGREEN;
-    std::cout << "size of BasicCanvas: " << sizeof(BasicCanvas)/1000 << "kB" << '\n';
-    std::cout << "size of LayeredCanvas: " << sizeof(LayeredCanvas)/1000 << "kB" << '\n';
+    if(dbg_file_lvl >= 2){
+        std::cout << "size of BasicCanvas: " << sizeof(BasicCanvas)/1000 << "kB" << '\n';
+        std::cout << "size of LayeredCanvas: " << sizeof(LayeredCanvas)/1000 << "kB" << '\n';
+    }
     if(argc <= 1){
         filename = "image";
     }else{

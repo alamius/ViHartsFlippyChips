@@ -469,25 +469,24 @@ void Chip::color(
                         }
                     }
                     if(dbg_file_lvl >= 4)
-                        LC->write(
-                            filename+"_f"+_to_str(f)+"="+faces[f].to_str()+"_e"+char(80+faces[f][e]->from)+char(80+faces[f][e]->to)
-                        );
+                        LC->write(filename+"_f"+_to_str(f)+"="+faces[f].to_str()+"_e"+char(80+faces[f][e]->from)+char(80+faces[f][e]->to));
                 }
             }
         }
-        if(dbg_file_lvl >= 3)
+        if(dbg_file_lvl >= 3){
             std::cout << "written layer " << e_LC << " of " << LC_len << "; size == " << sizeof(BasicCanvas) << '\n';
+            LC->write(filename+"_layer"+_to_str(e_LC), *write_bg_color);
+            if(dbg_file_lvl >= 4) LC->dump(filename+"_layer"+_to_str(e_LC));
+        }
         LC->save(filename+"_layer"+_to_str(e_LC));
-        LC->dump(filename+"_layer"+_to_str(e_LC));
-        LC->write(filename+"_layer"+_to_str(e_LC), *write_bg_color);
         LC->clear();
     }
     LC->clear();
     if(dbg_file_lvl >= 2) std::cout << "adding image layers together:" << '\n';
-    LC->dump(filename+"0_bg");
+    if(dbg_file_lvl >= 4) LC->dump(filename+"0_bg");
     for(int bc = 0; bc < LC_len; bc++){
         LC->load(filename+"_layer"+_to_str(bc), 0, true);
-        LC->dump(filename+_to_str(bc+1)+"_loaded");
+        if(dbg_file_lvl >= 4) LC->dump(filename+_to_str(bc+1)+"_loaded");
     }
     LC->filter(kernel_gauss, true);
     LC->save(filename+"_added", std_alpha_map);
@@ -496,7 +495,7 @@ void Chip::color(
     BC->background(0, 64, 0, 255);
     BC->load(filename+"_added");
     BC->write(filename);
-    BC->dump(filename);
+    if(dbg_file_lvl >= 4) BC->dump(filename);
     delete BC;
 }
 std::vector<Vector> Chip::intersect(){
