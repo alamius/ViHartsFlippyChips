@@ -84,7 +84,7 @@ public:
         ).dL(u);
         flipped = a.x*b.y - a.y*b.x < 0;
     };
-    Node(Vector value_, int n_, int e_, float t_, float u_){ //only for intersections Spline - Line (Spline/SplineConstruct::intersect_linear)
+    Node(Vector value_, int n_, int e_, float t_, float u_){ //only for intersections Spline - straight Line (Spline/SplineConstruct::intersect_linear)
         value = value_;
         p = n_;
         q = e_;
@@ -241,7 +241,6 @@ void Chip::color(
     make_faces();
     LC = new LayeredCanvas();
     LC->setpensize(pensize);
-    //canvasses for every edge:
     int max_edges = 0;
     for(int f = 0; f < faces.size(); f++){
         if(faces[f].size() > max_edges && faces[f].inside == 1){
@@ -249,12 +248,6 @@ void Chip::color(
         }
     }
     const int LC_len = max_edges;
-    // std::cout << "before alloc" << '\n';
-    // BasicCanvas LC[LC_len];
-    // std::cout << "after alloc" << '\n';
-    // for(int bc = 0; bc < LC_len; bc++){
-    //     LC[bc].setpensize(pensize);
-    // }
     //variables for face coloring
     SplineConstruct PQ, PR;
     Spline QR = Spline(Vector(), Vector(), Vector(), Vector());
@@ -268,8 +261,6 @@ void Chip::color(
     float dv = 1.0f/v_prec;
     colorint color[COLOR_LEN];
     for(int e_LC = 0; e_LC < LC_len; e_LC++){
-        // make_color(color, 0, 100, 0, 55);
-        // LC->background(color);
         for(int f = 0; f < faces.size(); f++){
             if(!faces[f].inside) continue;
             if(faces[f].size() == 1){
