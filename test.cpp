@@ -235,7 +235,7 @@ void test_knot_1(bool print = false){
     // chip.test_edges();
     // chip.make_faces();
     // std::cout << "chip:\n" << chip.dbg() << '\n';
-    chip.color(30, 30);
+    chip.color(50*WIDTH/2000, 50*WIDTH/2000);
     // chip.draw_net(5, 5, 0, -1, false, true);
     // BC->setcolor(BLUE);
     // chip.draw(BC);
