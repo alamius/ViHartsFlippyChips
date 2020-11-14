@@ -489,6 +489,7 @@ void Chip::color(
         LC->load(filename+"_layer"+_to_str(bc), 0, true);
         LC->dump(filename+_to_str(bc+1)+"_loaded");
     }
+    LC->filter(kernel_gauss, true);
     LC->save(filename+"_added", std_alpha_map);
     delete LC;
     BC = new BasicCanvas();
