@@ -32,7 +32,7 @@
     \usepackage{tikz}
     \usetikzlibrary{calc}
 
-\newcommand\samplesTikz{30}
+\newcommand\samplesTikz{10}
 \def\Spline#1#2#3#4#5#6#7#8{%Px Py Qx Qy px py qx qy
     plot (
         {   (#1) + (#5)*(\t) + (3*(#3) - 3*(#1) - 2*(#5) - (#7))*(\t)*(\t) + (2*(#1) - 2*(#3) + (#5) + (#7))*(\t)*(\t)*(\t)   },
@@ -52,6 +52,8 @@
 \DeclareMathOperator{\nLspline}{nL}
 \DeclareMathOperator{\Espline}{E}
 \DeclareMathOperator{\Fspline}{F}
+% for the drawing of examples taken from the c++ coded version. neccessary because TikZ constrols work different than the formulae of the Splines, I use
+\newcommand\controlfactor{.32}
 
 \title{Theory on Vi Hart's Flippy Chips}
 \author{Anton Obersteiner}
@@ -461,7 +463,6 @@
     %     t_r =& -\frac{-1}{-2-2i} \pm \sqrt{\left(\frac{1}{2+2i}\right)^2 - \frac{0}{-2-2i} + \frac{(-\sin(\theta_a) - \cos(\theta_a))r}{-2-2i}}
     % \end{aligned}$$
 \newpage
-\newcommand\controlfactor{.32}
 \section{Graph}
     given the construction of the line $L$ from spline segments
     $L_0=\Lspline_{ABab}$, $L_1=\Lspline_{BCbc}$, $...$, $L_l$, $...$, $L_{|L|}=\Lspline_{.A.a}$ and the intersections within that line:
