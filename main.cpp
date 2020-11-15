@@ -51,6 +51,36 @@ int main(int argc, char const *argv[]){
     srand(time(NULL));
     // initMouse();
 
+    Point A = Point(Vector(.45, .7), Vector(-1, 0));
+    Point B = Point(Vector(.15, .9), Vector(.5, .5));
+    Point C = Point(Vector(.45, .1), Vector( 1, 0));
+    Point D = Point(Vector(.75, .9), Vector(-1, 0));
+    Point E = Point(Vector(.75, .1), Vector( 1, 0));
+
+    Chip chip = Chip({A, B, C, D, E});
+    chip.color(
+        50 * WIDTH/2000,
+        50 * WIDTH/2000,
+        false, //draw_E
+        true, //draw_F
+        1, //pensize
+        &std_color_func, //color_func
+        false //apply_gauss
+    );
+    filename += "_2";
+    std::cout << "point A moved" << '\n';
+    A = Point(Vector(.35, .7), Vector(-1, 0));
+    chip = Chip({A, B, C, D, E});
+    chip.color(
+        50 * WIDTH/2000,
+        50 * WIDTH/2000,
+        false, //draw_E
+        true, //draw_F
+        1, //pensize
+        &std_color_func, //color_func
+        false //apply_gauss
+    );
+
     // test_PQR(10, 10);
     // test_snake();
     // test_Splines();
@@ -60,7 +90,7 @@ int main(int argc, char const *argv[]){
     // test_BC_LC();
     // test_ABCD();
     // test_intersect_linear();
-    test_knot_1(false);
+    // test_knot_1(false);
     // test_knot_2();
     // test_P();
     // test_create();
