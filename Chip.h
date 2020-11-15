@@ -197,7 +197,7 @@ public:
     //only copies the points
     Chip(std::vector<Point> points_);
     //
-    void color(int, int, bool, bool, int, colorint* (*)(colorint color[COLOR_LEN], float t, float v));
+    void color(int, int, bool, bool, int, colorint* (*)(colorint color[COLOR_LEN], float t, float v), bool apply_gauss);
     std::vector<Vector> intersect();
     std::vector<Vector> intersect_linear(Vector A, Vector a);
     void follow_edge(int p_curr, float t_curr, int sign, int d, int from, bool SplineConstruct_approximate);
@@ -234,7 +234,8 @@ void Chip::color(
     bool draw_E = false,
     bool draw_F = true,
     int pensize = 1,
-    colorint* (*color_func)(colorint result[COLOR_LEN], float t, float v) = &std_color_func
+    colorint* (*color_func)(colorint result[COLOR_LEN], float t, float v) = &std_color_func,
+    bool apply_gauss = true
 ){
     intersect();
     make_edges(true);
@@ -479,7 +480,9 @@ void Chip::color(
         LC->load(filename+"_layer"+_to_str(bc), 0, true);
         if(dbg_file_lvl >= 4) LC->dump(filename+_to_str(bc+1)+"_loaded");
     }
-    LC->filter(kernel_gauss, true);
+    if(apply_gauss){
+        LC->filter(kernel_gauss, true);
+    }
     LC->save(filename+"_added", std_alpha_map);
     delete LC;
     BC = new BasicCanvas();
