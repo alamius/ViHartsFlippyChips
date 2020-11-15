@@ -8,6 +8,7 @@ colorint GREEN[COLOR_LEN];
 colorint DARKGREEN[COLOR_LEN];
 colorint YELLOW[COLOR_LEN];
 colorint RED[COLOR_LEN];
+colorint TRANSPARENT[COLOR_LEN];
 void colors_init(){
     make_color(BLUE, 0, 0, 255);
     make_color(WHITE, 255, 255, 255);
@@ -16,6 +17,7 @@ void colors_init(){
     make_color(DARKGREEN, 0, 64, 0);
     make_color(YELLOW, 128, 255, 0);
     make_color(RED, 255, 0, 0);
+    make_color(TRANSPARENT, 0, 0, 0, 0);
 }
 
 void std_line(Vector a, Vector b){

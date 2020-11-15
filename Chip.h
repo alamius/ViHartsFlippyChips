@@ -486,7 +486,7 @@ void Chip::color(
     LC->save(filename+"_added", std_alpha_map);
     delete LC;
     BC = new BasicCanvas();
-    BC->background(0, 64, 0, 255);
+    BC->background(*write_bg_color);
     BC->load(filename+"_added");
     BC->write(filename);
     if(dbg_file_lvl >= 4) BC->dump(filename);

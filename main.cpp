@@ -14,6 +14,10 @@ static int dbg_file_lvl = 0;
 // #include <mouse.h>
 const int WIDTH = 2000, HEIGHT = 1600;
 
+#ifndef COLOR_LEN
+#define COLOR_LEN 2
+#endif
+
 #include <basic_canvas.h>
 #include <canvas_layered.h>
 BasicCanvas* BC;
@@ -29,8 +33,12 @@ colorint (*write_bg_color)[COLOR_LEN];
 
 int main(int argc, char const *argv[]){
     colors_init();
+    #if COLOR_LEN == 4
+        write_bg_color = &DARKGREEN;
+    #else
+        write_bg_color = &TRANSPARENT;
+    #endif
     make_kernel_gauss();
-    write_bg_color = &DARKGREEN;
     if(dbg_file_lvl >= 2){
         std::cout << "size of BasicCanvas: " << sizeof(BasicCanvas)/1000 << "kB" << '\n';
         std::cout << "size of LayeredCanvas: " << sizeof(LayeredCanvas)/1000 << "kB" << '\n';
