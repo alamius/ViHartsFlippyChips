@@ -61,6 +61,56 @@
 \begin{document}
 \maketitle
 
+\newcommand\behindIncludes{1}
+
+\section{Overview}
+\paragraph{Goal}
+    \begin{figure}
+        \begin{tikzpicture}[scale=8]
+            \node[inner sep=0pt, outer sep=0pt] (A) at (0.4, 0.8) {};
+            \node[inner sep=0pt, outer sep=0pt] (B) at (0.1, 1) {};
+            \node[inner sep=0pt, outer sep=0pt] (C) at (0.4, 0.2) {};
+            \node[inner sep=0pt, outer sep=0pt] (D) at (0.7, 1) {};
+            \node[inner sep=0pt, outer sep=0pt] (E) at (0.7, 0.2) {};
+            \draw (A) node[above]      {$A$} .. controls +({-1 *\controlfactor}, {0  *\controlfactor}) and +({-0.5*\controlfactor}, {-0.5*\controlfactor}) .. (B);
+            \draw (B) node[above left] {$B$} .. controls +({0.5*\controlfactor}, {0.5*\controlfactor}) and +({-1  *\controlfactor}, {-0  *\controlfactor}) .. (C);
+            \draw (C) node[below]      {$C$} .. controls +({ 1 *\controlfactor}, {0  *\controlfactor}) and +({ 1  *\controlfactor}, {-0  *\controlfactor}) .. (D);
+            \draw (D) node[above]      {$D$} .. controls +({-1 *\controlfactor}, {0  *\controlfactor}) and +({-1  *\controlfactor}, {-0  *\controlfactor}) .. (E);
+            \draw (E) node[below]      {$E$} .. controls +({ 1 *\controlfactor}, {0  *\controlfactor}) and +({ 1  *\controlfactor}, {-0  *\controlfactor}) .. (A);
+        \end{tikzpicture}
+        % \caption{}
+        \label{}
+    \end{figure}
+    The Goal is to write a Program that can generate Images with a Coloring that has a nice 3d-flipping Look from a closed Line as drawn by YouTuber and Mathematician Vi Hart. I'll call the result a 'Chip'.
+\paragraph{Challenges}
+    To achieve that, a few mathematical and computational Challenges need to be overcome, those are mainly:
+    \begin{itemize}
+        \item Finding the Intersections of the Line
+        \item Generating the Graph of the Chip
+        \item Defining the value of the Chip on the Plane
+    \end{itemize}
+\paragraph{Behind the \#Includes}
+    A lot has to be done behind the Curtains of a few {\tt \#include} statements.
+    In the Area of simple and composed Splines:
+    \begin{itemize}
+        \item Defining and Implementing Splines
+        \item Finding Intersections of a Spline with another and with itself
+        \item Intersections of a Spline with a straight Line
+        \item Getting a part of a Spline as a new Spline
+        \item Implementing all these for Spline Constructs too
+        \item Approximating Spline Constructs with one single Spline
+    \end{itemize}
+    And for actually Creating, Composing and Manipulating the resulting Images in a memory-efficient way:
+    \begin{itemize}
+        \item Defining Canvas Classes
+        \item $\alpha$-Channels and Layered Canvasses
+        \item Filtering (Oh, smooth Gauss)
+    \end{itemize}
+\paragraph{Outlook}
+    The next Challenge will be to make the algorithm more effient, especially when redrawing a Chip with a slightly changed Point.
+    The Canvas Classes could probably take some help from CUDA to become more time efficient – though I already made them as memory efficient as neccessary for large images on my machine.
+
+\if\behindIncludes1\input{splines.tex}\fi
 % \newpage
 \section{Net}
     \begin{figure}
