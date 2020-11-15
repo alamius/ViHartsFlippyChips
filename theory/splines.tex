@@ -1,0 +1,54 @@
+\section{Splines}
+    defined from splines:
+    $$\begin{aligned}
+        \Lspline_{PQpq}(t) =& P + pt + (3Q-3P-2p-q)t^2 + (2P-2Q+p+q)t^3 \\
+    \end{aligned}$$
+    % \begin{figure}
+    %     \begin{tikzpicture}[scale=5]
+    %         \draw
+    %             let \p{P} = (0, 0),
+    %                 \p{p} = (3, 0),
+    %                 \p{Q} = (0, 1),
+    %                 \p{q} = (3, 0)
+    %             in
+    %                 node[inner sep=0] (P)  at (\p{P}) {$\bullet$}
+    %                 node[inner sep=0] (p)  at ({\x{P}+\x{p}/3}, {\y{P}+\y{p}/3}) {}
+    %                 node[inner sep=0] (Q)  at ({\x{Q}},     {\y{Q}}) {$\bullet$}
+    %                 node[inner sep=0] (q)  at ({\x{Q}+\x{q}/3}, {\y{Q}+\y{q}/3}) {};
+    %         \draw[-latex] (P) node[below left]  {$P = 0$} -- (p) node[midway, below] {$\vec p = 3$};
+    %         \draw[-latex] (Q) node[above left] {$Q = i$} -- (q) node[midway, above] {$\vec q = 3$};
+    %         \draw[domain=0:1, samples=\samplesTikz, variable=\t]
+    %             let \p{P} = (0, 0),
+    %                 \p{p} = (3, 0),
+    %                 \p{Q} = (0, 1),
+    %                 \p{q} = (3, 0)
+    %             % let \p{P} = (0, 0),
+    %             %     \p{p} = (3, 0),
+    %             %     \p{Q} = (3, 2),
+    %             %     \p{q} = (0, 2)
+    %             in plot ({
+    %                 \x{P} + \x{p}*(\t) + (3*\x{Q} - 3*\x{P} - 2*\x{p} - \x{q})*(\t)*(\t) + (2*\x{P} - 2*\x{Q} + \x{p} + \x{q})*(\t)*(\t)*(\t)
+    %             }, {
+    %                 \y{P} + \y{p}*(\t) + (3*\y{Q} - 3*\y{P} - 2*\y{p} - \y{q})*(\t)*(\t) + (2*\y{P} - 2*\y{Q} + \y{p} + \y{q})*(\t)*(\t)*(\t)
+    %             });
+    %     \end{tikzpicture}
+    %     \caption{Spline $\Lspline_{0,3+2i,3,-2i}$}
+    %     \label{fig:spline1}
+    % \end{figure}
+\newcommand\diff{{\rm d}}
+\subsection{Intersection of Splines}
+    % \input{splines_intersection_algebra.tex}
+    Finding out, that a Solution for the Intersection $\Lspline_1(t) = \Lspline_2(u)$ is increadibly difficult and generally impossible to find analyically, took a long time and a lot of lines of \LaTeX... When I realized that I could not do it, I went with the unclean, imprecise and much less satisfying approach of putting hairbands on the Splines everywhere and letting them slowly wiggle together. What I'm talking about is Gradient Descent, with a number of parameters $t_i$ along Spline $A$ and the same number of parameters $u_j$ along $B$. Every possible pair of parameters $(t_i, u_j)$ is slowly changed to reduce the distance of the Points $A(t), B(u)$ according to a very simple approximation of the gradient:
+    $$\begin{aligned}
+        \diff{}t =& \frac{\alpha}{2\varepsilon} \left(\left|A(t-\varepsilon) - B(u)\right| - \left|A(t+\varepsilon) - B(u)\right|\right)\\
+        \diff{}u =& \frac{\alpha}{2\varepsilon} \left(\left|A(t) - B(u-\varepsilon)\right| - \left|A(t) - B(u+\varepsilon)\right|\right) \\
+    \end{aligned}$$
+    Here, $\alpha$ is the speed of the approximation, and there must be a hundred ways to make the convergence more efficient. Additional measures that are used in the algorithm:
+    \begin{itemize}
+        \item Accepting pairs, where the distance of the points is less than {\tt done\_crit} (default: 0.005), as solutions and removing them from the active pool
+        \item Removing pairs, where $t$ or $u$ are outside the Spline's Definition $[0, 1]$
+        \item Removing pairs that are almost the same as an accepted solution $(t_2, u_2)$: $|A(t) - A(t_2)| < $\phantom{.}{\tt same\_crit} and $|B(u) - B(u_2)| < $\phantom{.}{\tt same\_crit} (default: {\tt same\_crit} = 0.02)
+        \item Removing pairs that are not changing anymore ($|\diff{}t|, |\diff{}u| < $\phantom{.}{\tt fixed\_crit}, default: {\tt fixed\_crit} = 0.0001)
+        \item In self-intersection: $A = B$, so $t = u$ is useless and gets removed ($|t - u| < $\phantom{.}{\tt identical\_crit}, default: 0.05)
+    \end{itemize}
+    Another measure is rather practical: Two Splines that are subsequent – or: neighbors – in the Line, will always have the intersection where they join. That solution is of no value for the actual pupose and is therefore removed, if the corresponding parameter {\tt neighbors = true} is passed. Self-intersection calls also have to be marked in a similar way, with {\tt identical = true}.
