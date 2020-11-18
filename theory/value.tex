@@ -1,0 +1,7 @@
+\section{Value}
+    The Value $\eta(t, v)$ that is to be assigned depending on $t$ and $v$ in a Corner of a Face must start with white on one side out from $P$ and black on the other. (Which makes it undefined at $P$ itself, but that is a problem for theoreticians to deal with...) It must also end in white everwhere else and slowly change from one edge $\widetilde{PQ}$ to the other $\widetilde{PR}$ between the values found there. And it should get more and transparent as it gets further away from the Corner Node itself ($P$), because it is only "competent" near $P$ and can't tell us anything about the environment or $Q$ or $R$. The opposite of Transparency is either corruption or Opacity and for Opacity, the symbol $\alpha$ is common. I have chosen the following formulae for my Program:
+    $$\begin{aligned}
+        \eta(t, v) :=&\phantom{.} (t^3(1 - v) + v) \\
+        \alpha(t, v) :=&hantom{.} (1 - 0.99(t^3(1 - v) + v)) \\
+    \end{aligned}$$
+    The 0.99 just ensures, that the opacity never is 0, so there is "always some color there", in case, it is needed for lack of another corner to "overcolor" it.
