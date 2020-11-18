@@ -12,7 +12,7 @@ static int dbg_file_lvl = 0;
 #include <utils.random.h>
 // #include <graphics.utils.h>
 // #include <mouse.h>
-const int WIDTH = 2000, HEIGHT = 1600;
+const unsigned int WIDTH = 2000, HEIGHT = 1600;
 
 #ifndef COLOR_LEN
 #define COLOR_LEN 2
