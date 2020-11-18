@@ -67,19 +67,6 @@ int main(int argc, char const *argv[]){
         &std_color_func, //color_func
         false //apply_gauss
     );
-    filename += "_2";
-    std::cout << "point A moved" << '\n';
-    A = Point(Vector(.35, .7), Vector(-1, 0));
-    chip = Chip({A, B, C, D, E});
-    chip.color(
-        50 * WIDTH/2000,
-        50 * WIDTH/2000,
-        false, //draw_E
-        true, //draw_F
-        1, //pensize
-        &std_color_func, //color_func
-        false //apply_gauss
-    );
 
     // test_PQR(10, 10);
     // test_snake();
