@@ -117,8 +117,7 @@
         \item Filtering (smooooth Gauss!)
     \end{itemize}
 \paragraph{Outlook}
-    The next Challenge will be to make the algorithm more effient, especially when redrawing a Chip with a slightly changed Point.
-    The Canvas Classes could probably take some help from CUDA to become more time efficient – though I already made them as memory efficient as neccessary for large images on my machine.
+    The Project has resulted in a Prototype, not a full and final Program, many things are glued together behind the scenes and would fall apart on other Examples of a Chip.
 \section{Splines}
     \input{splines_basic.tex}
     \if\behindIncludes1
@@ -129,6 +128,19 @@
 \newpage
 \input{net.tex}
 \input{value.tex}
+\section{Outlook}
+\paragraph{Generalization}
+    There are a lot of details still not fully generalized:
+    \begin{itemize}
+        \item The Outer Face is detected with a diagonal, but that could also miss the Chip completely.
+        \item The Coloring only uses regular Splines, but usually the Edges are composed of at least two Splines, so there will be only an Approximation and for many cases of Lines, that would look terrible. To see this happen, you can look at the little ear in the top left corner of my First Page.
+        \item With more than three Edges to a Face, it could easily happen that the innermost Area is not covered by any Net and therefore stays opaque, though it could just be white. That {\bf would} be awkward.
+    \end{itemize}
+\paragraph{Optimization}
+    The next Challenge will be to make the algorithm more effient, especially when redrawing a Chip with a slightly changed Point.
+    The Canvas Classes could probably also take some help from CUDA to become more time efficient – though I already made them as memory efficient as neccessary for large images on my machine. \newline
+\paragraph{Interactivity}
+    Also, although there are some pieces of old code in {\tt test.cpp} that use the mouse, these are made for the annoyingly buggy {\tt graphics.h} which always took my {\tt X} with it when it crashed – sometimes also, when the program just terminated normally – so there is no Interactivity at all currently, even not using the commandline, the Points for the Line are just coded in. And I couldn't learn OpenGL in the last 5 weeks...
 % \newpage
 % \if\behindIncludes1\input{spline_intersection_linear.tex}\fi
 \end{document}
