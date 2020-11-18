@@ -117,9 +117,12 @@
 \paragraph{Outlook}
     The next Challenge will be to make the algorithm more effient, especially when redrawing a Chip with a slightly changed Point.
     The Canvas Classes could probably take some help from CUDA to become more time efficient – though I already made them as memory efficient as neccessary for large images on my machine.
-
-\if\behindIncludes1\input{splines.tex}\fi
-% \newpage
+\section{Splines}
+    \input{splines_basic.tex}
+    \if\behindIncludes1
+        \input{splines.tex}
+        \newpage
+    \fi
 \input{graph.tex}
 \newpage
 \input{net.tex}
