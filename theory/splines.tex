@@ -1,41 +1,52 @@
 \section{Splines}
-    defined from splines:
+    The Line on which the whole process will be based is defined as a series of Cubic Splines, from $P$ to $Q$:
     $$\begin{aligned}
         \Lspline_{PQpq}(t) =& P + pt + (3Q-3P-2p-q)t^2 + (2P-2Q+p+q)t^3 \\
+        &\Rightarrow \diffrm\Lspline(0) = p,\phantom{--} \diffrm\Lspline(1) = q \\
     \end{aligned}$$
-    % \begin{figure}
-    %     \begin{tikzpicture}[scale=5]
-    %         \draw
-    %             let \p{P} = (0, 0),
-    %                 \p{p} = (3, 0),
-    %                 \p{Q} = (0, 1),
-    %                 \p{q} = (3, 0)
-    %             in
-    %                 node[inner sep=0] (P)  at (\p{P}) {$\bullet$}
-    %                 node[inner sep=0] (p)  at ({\x{P}+\x{p}/3}, {\y{P}+\y{p}/3}) {}
-    %                 node[inner sep=0] (Q)  at ({\x{Q}},     {\y{Q}}) {$\bullet$}
-    %                 node[inner sep=0] (q)  at ({\x{Q}+\x{q}/3}, {\y{Q}+\y{q}/3}) {};
-    %         \draw[-latex] (P) node[below left]  {$P = 0$} -- (p) node[midway, below] {$\vec p = 3$};
-    %         \draw[-latex] (Q) node[above left] {$Q = i$} -- (q) node[midway, above] {$\vec q = 3$};
-    %         \draw[domain=0:1, samples=\samplesTikz, variable=\t]
-    %             let \p{P} = (0, 0),
-    %                 \p{p} = (3, 0),
-    %                 \p{Q} = (0, 1),
-    %                 \p{q} = (3, 0)
-    %             % let \p{P} = (0, 0),
-    %             %     \p{p} = (3, 0),
-    %             %     \p{Q} = (3, 2),
-    %             %     \p{q} = (0, 2)
-    %             in plot ({
-    %                 \x{P} + \x{p}*(\t) + (3*\x{Q} - 3*\x{P} - 2*\x{p} - \x{q})*(\t)*(\t) + (2*\x{P} - 2*\x{Q} + \x{p} + \x{q})*(\t)*(\t)*(\t)
-    %             }, {
-    %                 \y{P} + \y{p}*(\t) + (3*\y{Q} - 3*\y{P} - 2*\y{p} - \y{q})*(\t)*(\t) + (2*\y{P} - 2*\y{Q} + \y{p} + \y{q})*(\t)*(\t)*(\t)
-    %             });
-    %     \end{tikzpicture}
-    %     \caption{Spline $\Lspline_{0,3+2i,3,-2i}$}
-    %     \label{fig:spline1}
-    % \end{figure}
-\newcommand\diff{{\rm d}}
+    The following abbreviation will be useful for readability purposes:
+    $$\begin{aligned}
+        T :=&\phantom{.} 3Q-3P-2p-q \\
+        U :=&\phantom{.} 2P-2Q+p+q \\
+    \end{aligned}$$
+    diff:
+    $$\begin{aligned}
+        \diffrm\Lspline_{PQpq}(t) = p + 2Tt + 3Ut^2 \\
+    \end{aligned}$$
+    subspline:
+    The Spline following $\Lspline$ from $t_1$ to $t_2$ can be defined as follows:
+    $$\begin{aligned}
+        P =&\phantom{.} \Lspline(t_1) & Q =&\phantom{.} \Lspline(t_2) \\
+        p =&\phantom{.} (t_2-t_1)\diffrm\Lspline(t_1) & q =&\phantom{.} (t_2-t_1)\diffrm\Lspline(t_2-t_1)(t_2)) \\
+    \end{aligned}$$
+    \begin{figure}
+        \begin{tikzpicture}[scale=5]
+            \draw
+                let \p{P} = (0, 0),
+                    \p{p} = (1, 2),
+                    \p{Q} = (1, 0),
+                    \p{q} = (-2, -1)
+                in
+                    node[inner sep=0] (P)  at (\p{P}) {$\bullet$}
+                    node[inner sep=0] (p)  at ({\x{P}+\x{p}/3}, {\y{P}+\y{p}/3}) {}
+                    node[inner sep=0] (Q)  at ({\x{Q}},     {\y{Q}}) {$\bullet$}
+                    node[inner sep=0] (q)  at ({\x{Q}+\x{q}/3}, {\y{Q}+\y{q}/3}) {};
+            \draw[-latex] (P) node[below left]  {$P = 0$} -- (p) node[midway, left] {$p = 1+2i$};
+            \draw[-latex] (Q) node[above left] {$Q = 1$} -- (q) node[midway, below right] {$q = -2-i$};
+            \draw[domain=0:1, samples=\samplesTikz, variable=\t]
+                let \p{P} = (0, 0),
+                    \p{p} = (1, 2),
+                    \p{Q} = (1, 0),
+                    \p{q} = (-2, -1)
+                in plot ({
+                    \x{P} + \x{p}*(\t) + (3*\x{Q} - 3*\x{P} - 2*\x{p} - \x{q})*(\t)*(\t) + (2*\x{P} - 2*\x{Q} + \x{p} + \x{q})*(\t)*(\t)*(\t)
+                }, {
+                    \y{P} + \y{p}*(\t) + (3*\y{Q} - 3*\y{P} - 2*\y{p} - \y{q})*(\t)*(\t) + (2*\y{P} - 2*\y{Q} + \y{p} + \y{q})*(\t)*(\t)*(\t)
+                });
+        \end{tikzpicture}
+        \caption{Spline $\Lspline_{0,1,1+2i,-2-i}$}
+        \label{fig:spline1}
+    \end{figure}
 \subsection{Intersection of Splines}
     % \input{splines_intersection_algebra.tex}
     Finding out, that a Solution for the Intersection $\Lspline_1(t) = \Lspline_2(u)$ is increadibly difficult and generally impossible to find analyically, took a long time and a lot of lines of \LaTeX... When I realized that I could not do it, I went with the unclean, imprecise and much less satisfying approach of putting hairbands on the Splines everywhere and letting them slowly wiggle together. What I'm talking about is Gradient Descent, with a number of parameters $t_i$ along Spline $A$ and the same number of parameters $u_j$ along $B$. Every possible pair of parameters $(t_i, u_j)$ is slowly changed to reduce the distance of the Points $A(t), B(u)$ according to a very simple approximation of the gradient:
