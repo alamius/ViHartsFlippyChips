@@ -20,17 +20,18 @@
     \end{aligned}$$
 \subsection{Intersection of Splines}
     % \input{splines_intersection_algebra.tex}
-    Finding out, that a Solution for the Intersection $\Lspline_1(t) = \Lspline_2(u)$ is increadibly difficult and generally impossible to find analyically, took a long time and a lot of lines of \LaTeX... When I realized that I could not do it, I went with the unclean, imprecise and much less satisfying approach of putting hairbands on the Splines everywhere and letting them slowly wiggle together. What I'm talking about is Gradient Descent, with a number of parameters $t_i$ along Spline $A$ and the same number of parameters $u_j$ along $B$. Every possible pair of parameters $(t_i, u_j)$ is slowly changed to reduce the distance of the Points $A(t), B(u)$ according to a very simple approximation of the gradient:
+    Finding out, that a Solution for the Intersection $\Lspline_1(t) = \Lspline_2(u)$ is increadibly difficult and generally impossible to find analyically, took a long time and a lot of lines of \LaTeX... When I realized that I could not do it, I went with the unclean, imprecise and much less satisfying approach of putting hairbands on the Splines everywhere and then letting them slowly wiggle together.
+    What I'm talking about is Gradient Descent, with a number of Parameters $t$ along Spline $A$ and the same number of Parameters $u$ along $B$. Every possible Pair of Parameters $(t, u)$ is slowly changed to reduce the Distance of the Points $A(t), B(u)$ according to a very simple Approximation of the Gradient:
     $$\begin{aligned}
         \diff{}t =& \frac{\alpha}{2\varepsilon} \left(\left|A(t-\varepsilon) - B(u)\right| - \left|A(t+\varepsilon) - B(u)\right|\right)\\
         \diff{}u =& \frac{\alpha}{2\varepsilon} \left(\left|A(t) - B(u-\varepsilon)\right| - \left|A(t) - B(u+\varepsilon)\right|\right) \\
     \end{aligned}$$
-    Here, $\alpha$ is the speed of the approximation, and there must be a hundred ways to make the convergence more efficient. Additional measures that are used in the algorithm:
+    Here, $\alpha$ is the speed of the Approximation, and there must be a hundred ways to make the Convergence more efficient by changin it over time or a lot of other things. Additional measures that are used in the Algorithm:
     \begin{itemize}
-        \item Accepting pairs, where the distance of the points is less than {\tt done\_crit} (default: 0.005), as solutions and removing them from the active pool
-        \item Removing pairs, where $t$ or $u$ are outside the Spline's Definition $[0, 1]$
-        \item Removing pairs that are almost the same as an accepted solution $(t_2, u_2)$: $|A(t) - A(t_2)| < $\phantom{.}{\tt same\_crit} and $|B(u) - B(u_2)| < $\phantom{.}{\tt same\_crit} (default: {\tt same\_crit} = 0.02)
-        \item Removing pairs that are not changing anymore ($|\diff{}t|, |\diff{}u| < $\phantom{.}{\tt fixed\_crit}, default: {\tt fixed\_crit} = 0.0001)
-        \item In self-intersection: $A = B$, so $t = u$ is useless and gets removed ($|t - u| < $\phantom{.}{\tt identical\_crit}, default: 0.05)
+        \item Accepting Pairs, where the Distance of the Points is less than {\tt done\_crit} (Default: 0.005), as Solutions and removing them from the active pool
+        \item Removing Pairs, where $t$ or $u$ are outside the Spline's Definition $[0, 1]$
+        \item Removing Pairs that are almost the same as an accepted Solution $(t_2, u_2)$: $|A(t) - A(t_2)| < $\phantom{.}{\tt same\_crit} and $|B(u) - B(u_2)| < $\phantom{.}{\tt same\_crit} (Default: {\tt same\_crit} = 0.02)
+        \item Removing Pairs that are not changing anymore ($|\diff{}t|, |\diff{}u| < $\phantom{.}{\tt fixed\_crit}, Default: {\tt fixed\_crit} = 0.0001)
+        \item In Self-Intersection: $A = B$, so $t = u$ is useless and gets removed ($|t - u| < $\phantom{.}{\tt identical\_crit}, Default: 0.05)
     \end{itemize}
-    Another measure is rather practical: Two Splines that are subsequent – or: neighbors – in the Line, will always have the intersection where they join. That solution is of no value for the actual pupose and is therefore removed, if the corresponding parameter {\tt neighbors = true} is passed. Self-intersection calls also have to be marked in a similar way, with {\tt identical = true}.
+    Another measure is rather practical: Two Splines that are subsequent – or: Neighbors – in the Line, will always have the Intersection where they join. That Solution is of no value for the actual pupose and is therefore removed, if the corresponding Parameter {\tt neighbors = true} is passed. Self-Intersection calls also have to be marked in a similar way, with {\tt identical = true}.

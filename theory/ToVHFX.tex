@@ -90,13 +90,13 @@
 
 \section{Overview}
 \paragraph{Goal}
-    The Goal is to write a Program that can generate Images with a Coloring that has a nice 3d-flipping Look from a closed Line as drawn by YouTuber and Mathematician Vi Hart. I'll call the result a 'Chip'.
+    The Goal is to write a Program that can generate Images with a Coloring that has a nice 3D-flipping Look from a closed Line as drawn by YouTuber and Mathematician Vi Hart. I'll call the result a 'Chip'.
 \paragraph{Challenges}
     To achieve that, a few mathematical and computational Challenges need to be overcome, those are mainly:
     \begin{itemize}
         \item Finding the Intersections of the Line
         \item Generating the Graph of the Chip
-        \item Defining the value of the Chip on the Plane
+        \item Defining the value of the Chip in the Faces
     \end{itemize}
 \paragraph{Behind the \#Includes}
     A lot has to be done behind the Curtains of a few {\tt \#include} statements.
@@ -104,16 +104,17 @@
     \begin{itemize}
         \item Defining and Implementing Splines
         \item Finding Intersections of a Spline with another and with itself
-        \item Intersections of a Spline with a straight Line
+        \item Finding Intersections of a Spline with a straight Line
         \item Getting a part of a Spline as a new Spline
-        \item Implementing all these for Spline Constructs too
+        \item Implementing almost all of these for Spline Constructs (several Splines) too
         \item Approximating Spline Constructs with one single Spline
     \end{itemize}
     And for actually Creating, Composing and Manipulating the resulting Images in a memory-efficient way:
     \begin{itemize}
         \item Defining Canvas Classes
         \item $\alpha$-Channels and Layered Canvasses
-        \item Filtering (Oh, smooth Gauss)
+        \item Drawing Basic Shapes (when Lines are the hardest thing)
+        \item Filtering (smooooth Gauss!)
     \end{itemize}
 \paragraph{Outlook}
     The next Challenge will be to make the algorithm more effient, especially when redrawing a Chip with a slightly changed Point.
