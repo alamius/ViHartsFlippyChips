@@ -1,0 +1,34 @@
+\section{Graph}
+    given the construction of the line $L$ from spline segments
+    $L_0=\Lspline_{ABab}$, $L_1=\Lspline_{BCbc}$, $...$, $L_l$, $...$, $L_{|L|}=\Lspline_{.A.a}$ and the intersections within that line:
+    $P_0, P_1, ..., P_p, ..., P_{|P|}$, where an intersection has two $L$-indice $l, m$ and the corresponding parameters $t, u$ so that $\Lspline_l(t) = \Lspline_m(u)$,
+    what are the (internal) areas of the shape?
+    \begin{figure}
+        \begin{tikzpicture}[scale=8]
+            \node (A) at (0.4, 0.8) {$\bullet$};
+            \node (B) at (0.1, 1) {$\bullet$};
+            \node (C) at (0.4, 0.2) {$\bullet$};
+            \node (D) at (0.7, 1) {$\bullet$};
+            \node (E) at (0.7, 0.2) {$\bullet$};
+            \draw (A) node[below] {$A$} .. controls +({-1*\controlfactor}, {0*\controlfactor}) and +({-0.5*\controlfactor}, {-0.5*\controlfactor}) .. (B);
+            \draw (B) node[below] {$B$} .. controls +({0.5*\controlfactor}, {0.5*\controlfactor}) and +({-1*\controlfactor}, {-0*\controlfactor}) .. (C);
+            \draw (C) node[below] {$C$} .. controls +({1*\controlfactor}, {0*\controlfactor}) and +({1*\controlfactor}, {-0*\controlfactor}) .. (D);
+            \draw (D) node[below] {$D$} .. controls +({-1*\controlfactor}, {0*\controlfactor}) and +({-1*\controlfactor}, {-0*\controlfactor}) .. (E);
+            \draw (E) node[below] {$E$} .. controls +({1*\controlfactor}, {0*\controlfactor}) and +({1*\controlfactor}, {-0*\controlfactor}) .. (A);
+            \node (P) at (0.1846, 0.808273) {$\bullet$};
+            \draw (P) node[above right] {$P$};
+            \node (Q) at (0.560517, 0.258828) {$\bullet$};
+            \draw (Q) node[above] {$Q$};
+            \node (R) at (0.776839, 0.544064) {$\bullet$};
+            \draw (R) node[right] {$R$};
+            \node (S) at (0.477184, 0.790679) {$\bullet$};
+            \draw (S) node[above right] {$S$};
+            \node (QSP) at (.32, .5) {$QSP$};
+            \node (QRS) at (.6, .5) {$QRS$};
+            \node (QR) at (.72, .3) {$QR$};
+            \node (RS) at (.7, .85) {$RS$};
+            \node (P) at (0.12, .9) {$P$};
+        \end{tikzpicture}
+        \caption{}
+        \label{}
+    \end{figure}
