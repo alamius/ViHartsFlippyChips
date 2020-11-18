@@ -1,8 +1,4 @@
 \section{Graph}
-    given the construction of the line $L$ from spline segments
-    $L_0=\Lspline_{ABab}$, $L_1=\Lspline_{BCbc}$, $...$, $L_l$, $...$, $L_{|L|}=\Lspline_{.A.a}$ and the intersections within that line:
-    $P_0, P_1, ..., P_p, ..., P_{|P|}$, where an intersection has two $L$-indice $l, m$ and the corresponding parameters $t, u$ so that $\Lspline_l(t) = \Lspline_m(u)$,
-    what are the (internal) areas of the shape?
     \begin{figure}
         \begin{tikzpicture}[scale=8]
             \node (A) at (0.4, 0.8) {$\bullet$};
@@ -32,3 +28,4 @@
         \caption{}
         \label{}
     \end{figure}
+    When all the Intersections $P, Q, R, ...$ in the Chip are found, that gives away neither the Edges nor the Faces immediately. For every Intersection, the parameters $t$ and $u$ are given and also , more importantly, the Points $A$ and $C$, they come from. with that information, an algorithm can follow the Line from Spline $\widetilde{AB}(t)$ on until it finds andother intersection $(A_2, C_2, t_2, u_2)$. In the Example, $P$ is roughly $\widetilde{AB}(0.26) = \widetilde{BC}(0.39)$.
