@@ -33,4 +33,12 @@
         \caption{All points $A, B, ...$ and Intersections/Nodes $P, Q, R, S$ with Faces}
         \label{fig:graph1}
     \end{figure}
-    When all the Intersections $P, Q, R, ...$ in the Chip are found, that gives away neither the Edges nor the Faces immediately. For every Intersection, the parameters $t$ and $u$ are given and also , more importantly, the Points $A$ and $C$, they come from. with that information, an algorithm can follow the Line from Spline $\widetilde{AB}(t)$ on until it finds andother intersection $(A_2, C_2, t_2, u_2)$. In the Example, $P$ is roughly $\widetilde{AB}(0.26) = \widetilde{BC}(0.39)$.
+\paragraph{Edges}
+    When all the Intersections $P, Q, R, ...$ in the Chip are found, that gives away neither the Edges nor the Faces immediately. For every Intersection, the parameters $t$ and $u$ are given and also, more importantly, the Points $A$ and $C$, they come from. with that information, an algorithm can follow the Line from Spline $\widetilde{AB}(t)$ on until it finds another intersection $(A_2, C_2, t_2, u_2)$.
+    In the Example, $P$ is roughly at $\widetilde{AB}(0.26)$. Then $\widetilde{AB}(.26)$ is followed to $B$ and then from $\widetilde{BC}(0)$ to $\widetilde{BC}(.39)$, which is also $P$.
+\paragraph{Faces}
+    Numbering the outgoing Edges of a Node $P$ as {\tt P0, P1, P2, P3} clockwise gives us then the ability to follow along the inside of a Face. {\tt P0} leads to {\tt Q2}, then we follow {\tt Q3 -- S0}, then {\tt S1 -- P3} and we would next follow {\tt P0} so we have found the Face $(PQS)$.
+    In the Example, this method yields Faces $(PQS), (QRS), (QR), (RS), (P)$ and the outside Face $(PPSRQ)$.
+\paragraph{inside – outside}
+    Which Face actually is the outside Face, is rather important because only the inside Faces will be colored. The Algorithm detects the outside face by calculating the first Intersections of any Edge with the straight Line from $(0, 0)$ to $(1, 1)$. This isn't perfect but a more general definition isn't needed currently.
+    Once the outside is known, all adjacent Faces are inside. Vice versa and so on until all faces are either outside or inside. This makes $(QRS)$ outside for example.
