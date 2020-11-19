@@ -180,8 +180,10 @@ std::string Face::dbg(string indent = ""){
 colorint* std_color_func(colorint result[COLOR_LEN], float t, float v){
     make_color(
         result,
-        255.0f*(t*t*t*(1.0f-v) + v),
-        255.0f*(1.0f-.99*(t*t*t*(1.0f-v) + v))
+        255.0f*v,
+        //255.0f*(t*t*t*(1.0f-v) + v),
+        255.0f*(1.0f - t)*(1.0f - t)
+        //255.0f*(1.0f-.99*(t*t*t*(1.0f-v) + v))
         // 255.0f*pow(.01, t)
     );
     return result;
