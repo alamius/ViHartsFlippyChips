@@ -545,6 +545,7 @@ std::vector<Vector> Chip::intersect(){
     //sorting nodes_ to nodes: every node twice, sorted in as {value, p, t, q, u} and {value, q, u, p, t}
     //using p/q as first sorting order and t/u as second
     if(nodes_.size() == 0){
+        std::cerr << "no nodes, no intersections, no Chip!" << std::endl;
         nodes = std::vector<Node>();
         return result;
     }
