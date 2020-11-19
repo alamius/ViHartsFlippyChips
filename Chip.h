@@ -321,7 +321,7 @@ void Chip::color(
                         F[v_] = new Spline(P, P, p1*v, p2*v);
                         // F[v_]->draw(LC);
                         for(float t = 0; t < 1; t += dt){
-                            LC->setcolor(color_func(color, t, v));
+                            LC->setcolor(color_func(color, t, t));
                             LC->quadrilateral_unchecked(
                                 (*(F[v_-1]))(t+dt),
                                 (*(F[v_-1]))(t),
