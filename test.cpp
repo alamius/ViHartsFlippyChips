@@ -372,15 +372,16 @@ void test_random(int n=5){
         std::cout << "added Point to Chip: " << points[c].dbg() << std::endl;
         chip = Chip(points);
         if(drawing){
-            BC->clear();
-            chip.draw(BC);
-        }
-    }
-    if(drawing) BC->setcolor(BLUE);
-    std::vector<Vector> intersections = chip.intersect();
-    if(drawing){
-        for(int i = 0; i < intersections.size(); i++){
-            _cross(intersections[i], .01);
+			filename += "_";
+            chip.color(
+				50 * WIDTH/2000,
+        		50 * WIDTH/2000,
+		        false, //draw_E
+		        true, //draw_F
+		        1, //pensize
+        		&std_color_func, //color_func
+		        false //apply_gauss);
+			);
         }
     }
     std::cout << "test_random finished" << '\n';
