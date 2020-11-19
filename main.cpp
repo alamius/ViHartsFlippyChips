@@ -14,8 +14,14 @@ static int dbg_file_lvl = 0;
 // #include <mouse.h>
 const unsigned int WIDTH = 2000, HEIGHT = 1600;
 
+//for include/canvas_color.h used by include/basic_canvas.h and include/canvas_layered.h
 #ifndef COLOR_LEN
-#define COLOR_LEN 2
+#define COLOR_LEN 4
+#endif
+
+//for include/canvas_kernel.h
+#ifndef CANVAS_KERNEL_SIZE
+#define CANVAS_KERNEL_SIZE 9
 #endif
 
 #include <basic_canvas.h>
