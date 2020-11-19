@@ -524,7 +524,7 @@ std::vector<Vector> Chip::intersect(){
             identical = (p == q);
             P->intersect(*Q, intersections, &intersections_len, neighbors, identical);
             for(int i = 0; i < intersections_len; i++){
-                nodes_.push_back(Node(intersections[i].value, p, intersections[i].t, q, intersections[i].u, points));
+                nodes_.push_back(Node(-1, intersections[i].value, p, intersections[i].t, q, intersections[i].u, points));
                 result.push_back(intersections[i].value);
                 if(dbg_file_lvl >= 4) std::cout << "      found: " << nodes_.back().dbg() << '\n';
             }
@@ -536,6 +536,21 @@ std::vector<Vector> Chip::intersect(){
     if(nodes_.size() == 0){
         nodes = std::vector<Node>();
         return result;
+    }
+    int count;
+    for(int n = 0; n < nodes_.size(); n++){
+        count = 0;
+        for(int m = 0; m < nodes_.size(); m++){
+            if(nodes_[m].p < nodes_[n].p || nodes_[m].p == nodes_[n].p && nodes_[m].t < nodes_[n].t){
+                count++;
+            }
+            if(nodes_[m].q < nodes_[n].p || nodes_[m].q == nodes_[n].p && nodes_[m].u < nodes_[n].t){
+                count++;
+            }
+        }
+        nodes_[n].index = count;
+        if(dbg_file_lvl >= 3) cout << "node " << n << ": index == " << count << std::endl;
+        // getch();
     }
     nodes = std::vector<Node>({nodes_[0]});
     bool inserted;
