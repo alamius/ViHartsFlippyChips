@@ -571,16 +571,16 @@ std::vector<Vector> Chip::intersect(){
         inserted = false;
         to_insert = nodes_[n];
         //inserting nodes_[n] once as the original and once in the flipped form
-            for(int m = 0; m < nodes.size(); m++){
-                if(nodes[m] > to_insert){
-                    nodes.insert(nodes.begin()+m, to_insert);
-                    inserted = true;
-                    break;
-                }
+        for(int m = 0; m < nodes.size(); m++){
+            if(nodes[m] > to_insert){
+                nodes.insert(nodes.begin()+m, to_insert);
+                inserted = true;
+                break;
             }
-            if(!inserted){
-                nodes.push_back(to_insert);
-            }
+        }
+        if(!inserted){
+            nodes.push_back(to_insert);
+        }
         // getch();
     }
     if(dbg_file_lvl > 2){
