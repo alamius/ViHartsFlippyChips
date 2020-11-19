@@ -62,13 +62,14 @@ public:
     Edge* edges[4];
     bool edges_walked[4];
     bool flipped;
-    bool p_on_top;
+    int index = -1;
     Node(){
         for(int d = 0; d < 4; d++){
             edges[d] = new Edge();
         }
     };
-    Node(Vector value_, int p_, float t_, int q_, float u_, std::vector<Point>& points){
+    Node(int index_, Vector value_, int p_, float t_, int q_, float u_, std::vector<Point>& points){
+        index = index_;
         value = value_;
         p = p_;
         t = t_;
@@ -83,6 +84,14 @@ public:
             points[(q + 1) % points.size()]
         ).dL(u);
         flipped = a.x*b.y - a.y*b.x < 0;
+    };
+    Node(int index_, Vector value_, int p_, float t_, int q_, float u_){
+        index = index_;
+        value = value_;
+        p = p_;
+        t = t_;
+        q = q_;
+        u = u_;
     };
     Node(Vector value_, int n_, int e_, float t_, float u_){ //only for intersections Spline - straight Line (Spline/SplineConstruct::intersect_linear)
         value = value_;
