@@ -313,6 +313,9 @@ void Chip::color(
                     // F[0]->draw(LC);
                     for(int v_ = 1; v_ <= v_prec; v_++){
                         v = dv*v_;
+                        if(0 && nodes[faces[f][0]->from].index % 2 == 0){
+                            v = 1.0f - v;
+                        }
                         F[v_] = new Spline(P, P, p1*v, p2*v);
                         // F[v_]->draw(LC);
                         for(float t = 0; t < 1; t += dt){
@@ -376,6 +379,9 @@ void Chip::color(
                         // F[0]->draw(LC);
                         for(int v_ = 1; v_ <= v_prec; v_++){
                             v = dv*v_;
+                            if(0 && nodes[faces[f][e]->from].index % 2 == 0){
+                                v = 1.0f - v;
+                            }
                             F[v_] = new Spline(P, Q, p1*(1.0f-v) - p2*v, q2*(1.0f-v) - q1*v);
                             // F[v_]->draw(LC);
                             for(float t = 0; t < .99; t += dt){
@@ -450,6 +456,9 @@ void Chip::color(
                         // F[0]->draw(LC);
                         for(int v_ = 1; v_ <= v_prec; v_++){
                             v = dv*v_;
+                            if(0 && nodes[faces[f][e]->from].index % 2 == 0){
+                                v = 1.0f - v;
+                            }
                             F[v_] = new Spline(
                                 P,
                                 QR(v),
