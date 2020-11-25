@@ -249,30 +249,128 @@ int main(int argc, char const *argv[]){
         std::cout << "size of BasicCanvas: " << sizeof(BasicCanvas)/1000 << "kB" << '\n';
         std::cout << "size of LayeredCanvas: " << sizeof(LayeredCanvas)/1000 << "kB" << '\n';
     }
-    if(argc <= 1){
-        filename = "image";
-    }else{
-        filename = argv[1];
-    }
+    filename = "image";
     srand(time(NULL));
     // initMouse();
+    Chip* chip = NULL;
 
-    Point A = Point(Vector(.45, .7), Vector(-1, 0));
-    Point B = Point(Vector(.15, .9), Vector(.5, .5));
-    Point C = Point(Vector(.45, .1), Vector( 1, 0));
-    Point D = Point(Vector(.75, .9), Vector(-1, 0));
-    Point E = Point(Vector(.75, .1), Vector( 1, 0));
-
-    Chip chip = Chip({A, B, C, D, E});
-    chip.color(
-        50 * WIDTH/2000,
-        50 * WIDTH/2000,
-        false, //draw_E
-        true, //draw_F
-        1, //pensize
-        &std_color_func, //color_func
-        false //apply_gauss
-    );
+    std::string arg;
+    std::vector<std::string> values;
+    std::vector<Point> points;
+    bool apply_gauss = false;
+    int t_prec = 50;
+    int v_prec = 50;
+    int regular = 3;
+    float regular_factor = 3;
+    for(int a = 1; a < argc; a++){
+        arg = argv[a];
+        if(arg.substr(0, 2) == "--"){
+            if(is_key(arg, "chip")){
+                if(is_key(arg, "chip-file")){
+                    if(is_key(arg, "chip-file=")){
+                        std::string chip_file_name = get_string(arg);
+                        std::ifstream chip_file(chip_file_name, std::ios::in);
+                        if(chip_file.is_open()){
+                            std::string line;
+                            while(std::getline(chip_file, line)){
+                                values.push_back(line);
+                            }
+                            chip_file.close();
+                        }else{
+                            std::cerr << "Unable to open file " << chip_file_name << "\n";
+                            continue;
+                        }
+                        points = to_Points(values);
+                        for(int i = 0; i < values.size(); i++){
+                            std::cout << "values[" << i << "] == " << values[i] << " -> " << points[i].dbg() << '\n';
+                        }
+                    }else{
+                        std::cout << "--chip-file must get an argument: --chip-file=file1\n";
+                    }
+                }else{
+                    if(is_key(arg, "chip=")){
+                        values = get_values(arg, ',');
+                        points = to_Points(values);
+                        for(int i = 0; i < values.size(); i++){
+                            std::cout << "values[" << i << "] == " << values[i] << " -> " << points[i].dbg() << '\n';
+                        }
+                    }else{
+                        points.push_back(Point(Vector(.45, .7), Vector(-1, 0)));
+                        points.push_back(Point(Vector(.15, .9), Vector(.5, .5)));
+                        points.push_back(Point(Vector(.45, .1), Vector( 1, 0)));
+                        points.push_back(Point(Vector(.75, .9), Vector(-1, 0)));
+                        points.push_back(Point(Vector(.75, .1), Vector( 1, 0)));
+                    }
+                }
+                chip = new Chip(points);
+                std::cout << chip->dbg() << '\n';
+            }else if(is_key(arg, "regular-factor=")){
+                regular_factor = get_float(arg);
+                std::cout << "using regular-factor " << regular_factor << " (must be set before --regular!)" << '\n';
+            }else if(is_key(arg, "regular")){
+                if(is_key(arg, "regular=")){
+                    regular = get_int(arg);
+                }else{
+                    regular = 3;
+                }
+                int P = 5;
+                float t;
+                for(int p = 0; p < P; p++){
+                    t = M_PI * 2 * p / P;
+                    points.push_back(Point(
+                        Vector(
+                            -sin(t*4)/6 + sin(t)/4 + .5,
+                            cos(t*4)/6 + cos(t)/4 + .5
+                        ), Vector(
+                            -cos(t*4)*4/6 + cos(t)/4,
+                            -sin(t*4)*4/6 - sin(t)/4
+                        )*regular_factor
+                    ));
+                }
+                std::cout << "using regular with " << regular << " points. (subsequent --chip* overwrites this again!)" << '\n';
+                chip = new Chip(points);
+            }else if(is_key(arg, "color")){
+                if(chip == NULL){
+                    std::cerr << "arg '" << arg << "' called without chip! create one with --chip argument." << '\n';
+                    exit(1);
+                }
+                chip->color(
+                    t_prec * WIDTH/2000,
+                    50 * WIDTH/2000,
+                    false, //draw_E
+                    true, //draw_F
+                    1, //pensize
+                    &std_color_func, //color_func
+                    apply_gauss //apply_gauss
+                );
+            }else if(is_key(arg, "draw")){
+                if(chip == NULL){
+                    std::cerr << "arg '" << arg << "' called without chip! create one with --chip argument." << '\n';
+                    exit(1);
+                }
+                BC = new BasicCanvas();
+                chip->draw(BC);
+                BC->write(filename+".draw");
+            }else if(is_key(arg, "gauss")){
+                std::cout << "using gauss." << '\n';
+                apply_gauss = true;
+            }else if(is_key(arg, "no-gauss")){
+                std::cout << "not using gauss." << '\n';
+                apply_gauss = false;
+            }else if(is_key(arg, "dbg")){
+                if(is_key(arg, "dbg=")){
+                    dbg_file_lvl = get_int(arg);
+                }else{
+                    dbg_file_lvl = 1;
+                }
+                std::cout << "using dbg level " << dbg_file_lvl << "." << '\n';
+            }
+        }else{
+            filename = arg;
+            std::cout << "output file set to '" << filename << "'\n";
+        }
+    }
+	//test_random();
 
     // test_PQR(10, 10);
     // test_snake();
