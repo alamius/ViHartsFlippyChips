@@ -370,36 +370,8 @@ int main(int argc, char const *argv[]){
             std::cout << "output file set to '" << filename << "'\n";
         }
     }
-	//test_random();
-
-    // test_PQR(10, 10);
-    // test_snake();
-    // test_Splines();
-    // test_SplineConstructs();
-    // test_SplineConstruct_approximate();
-    // test_basic_canvas();
-    // test_BC_LC();
-    // test_ABCD();
-    // test_intersect_linear();
-    // test_knot_1(false);
-    // test_knot_2();
-    // test_P();
-    // test_create();
-    // for(int a = 0; a < 5; a++){
-    //     test_random(7);
-    //     getch();
-    // }
-    // if(drawing) getch();
-
-    // char wait;
-    // std::cin >> wait;
     std::cout << "finished" << '\n';
 
-    // std::this_thread::sleep_for(std::chrono::milliseconds(50));
     // endMouse();
-    // std::cout << "write image to " << filename << ".ppm" << '\n';
-    // BC->write(filename);
-    // delete BC;
-    // delete LC;
     return 0;
 }
