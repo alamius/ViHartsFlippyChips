@@ -249,6 +249,7 @@ void Chip::color(
     bool apply_gauss = true
 ){
     intersect();
+    if(nodes.size() == 0) return;
     make_edges(true);
     make_faces();
     LC = new LayeredCanvas();
