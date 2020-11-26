@@ -214,6 +214,17 @@ public:
         colorint* (*color_func)(colorint result[COLOR_LEN], float t, float v),
         bool apply_gauss
     );
+    template <typename CanvasT>
+    void color_stripe(
+        CanvasT* C,
+        int t_prec,
+        int v_prec,
+        colorint* (*color_func)(colorint result[COLOR_LEN], float t, float v),
+        const Vector& P, const Vector& p1, const Vector& p2,
+        const Vector& Q, const Vector& q1, const Vector& q2,
+        const Vector& R, const Vector& r1, const Vector& r2,
+        const Vector& S, const Vector& s1, const Vector& s2
+    );
     std::vector<Vector> intersect();
     std::vector<Vector> intersect_linear(Vector A, Vector a);
     void follow_edge(int p_curr, float t_curr, int sign, int d, int from, bool SplineConstruct_approximate);
@@ -413,6 +424,49 @@ void Chip::color(
     BC->write(filename);
     if(dbg_file_lvl >= 4) BC->dump(filename);
     delete BC;
+}
+template <typename CanvasT>
+void Chip::color_stripe(
+    CanvasT* C,
+    int t_prec,
+    int v_prec,
+    colorint* (*color_func)(colorint result[COLOR_LEN], float t, float v),
+    const Vector& P, const Vector& p1, const Vector& p2,
+    const Vector& Q, const Vector& q1, const Vector& q2,
+    const Vector& R, const Vector& r1, const Vector& r2,
+    const Vector& S, const Vector& s1, const Vector& s2
+){
+    // P 1 ~~ Q 1
+    // 2      2
+    // |      |
+    // R 1 ~~ S 1
+    // 2      2
+    Spline* PR = new Spline(P, R, p2, r2);
+    Spline* QS = new Spline(Q, S, q2, s2);
+    float v;
+    float dv = 1.0f/v_prec;
+    float dt = 1.0f/t_prec;
+    Spline* F[v_prec+1];
+    F[0] = new Spline(P, Q, p1, q1);
+    colorint fillcolor[COLOR_LEN];
+    for(int v_ = 1; v_ <= v_prec; v_++){
+        v = v_*dv;
+        F[v_] = new Spline(
+            PR->L(v),
+            QS->L(v),
+            p1 * (1.0f - v) + r1 * v,
+            s1 * (1.0f - v) + s1 * v
+        );
+        for(float t = 0; t < .99; t += dt){
+            C->setcolor(color_func(fillcolor, t, v));
+            C->quadrilateral_unchecked(
+                (*(F[v_-1]))(t+dt),
+                (*(F[v_-1]))(t),
+                (*(F[v_  ]))(t+dt),
+                (*(F[v_  ]))(t)
+            );
+        }
+    }
 }
 std::vector<Vector> Chip::intersect(){
     if(dbg_file_lvl >= 4) std::cout << "intersections of:" << '\n';
