@@ -634,25 +634,6 @@ void Chip::make_edges(bool SplineConstruct_approximate = true){
         if(dbg_file_lvl >= 2) std::cout << '\n';
     }
 }
-void Chip::test_edges(){
-    if(dbg_file_lvl >= 2) std::cout << "test_edges" << '\n';
-    Vector V, v;
-    Vector rotate_left = Vector(0, 1); //read as complex number i
-    for(int n = 0; n < nodes.size(); n++){
-        if(dbg_file_lvl >= 3) std::cout << "  node " << char(80 + n) << '\n';
-        for(int d = 0; d < 4; d++){
-            // int d = 3;
-            if(dbg_file_lvl >= 3) std::cout << "    edge " << d << ": " << nodes[n].edges[d]->dbg() << ": \n" << nodes[n].edges[d]->S.dbg("      ") << "\n";
-            if(drawing)
-                for(float t = 0; t <= 1; t += .1){
-                    V = nodes[n].edges[d]->S(t);
-                    v = nodes[n].edges[d]->S.dL(t).norm(.05 * (1.0f-t));
-                    BC->line(V, V + v.mult_complex(rotate_left));
-                }
-        }
-        if(dbg_file_lvl >= 2) std::cout << '\n';
-    }
-}
 void Chip::make_faces(){
     if(dbg_file_lvl >= 4) std::cout << "Chip/make_faces" << '\n';
     //reset faces and edges_walked

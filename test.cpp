@@ -232,7 +232,6 @@ void test_knot_1(bool print = false){
     // }
     // chip.intersect();
     // chip.make_edges();
-    // chip.test_edges();
     // chip.make_faces();
     // std::cout << "chip:\n" << chip.dbg() << '\n';
     chip.color(50*WIDTH/2000, 50*WIDTH/2000);
@@ -283,7 +282,6 @@ void test_ABCD(int t_prec = 5, int v_prec = 5){
     if(drawing) chip.draw(BC);
     chip.intersect();
     chip.make_edges();
-    chip.test_edges();
     // return;
     chip.make_faces();
     std::cout << "chip:\n" << chip.dbg() << '\n';
@@ -307,7 +305,6 @@ void test_knot_2(){
     }
     chip.intersect();
     chip.make_edges();
-    chip.test_edges();
     chip.make_faces();
     chip.draw_net(BC);
     std::cout << "chip:\n" << chip.dbg() << '\n';
