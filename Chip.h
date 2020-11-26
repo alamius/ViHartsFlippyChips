@@ -267,7 +267,7 @@ void Chip::color(
     float t, v;
     float dt = 1.0f/t_prec;
     float dv = 1.0f/v_prec;
-    colorint color[COLOR_LEN];
+    colorint fillcolor[COLOR_LEN];
     for(int e_LC = 0; e_LC < LC_len; e_LC++){
         for(int f = 0; f < faces.size(); f++){
             if(!faces[f].inside) continue;
@@ -290,7 +290,7 @@ void Chip::color(
                     }
                     F[v_] = new Spline(P, P, p1*v, p2*v);
                     for(float t = 0; t < 1; t += dt){
-                        LC->setcolor(color_func(color, t, t));
+                        LC->setcolor(color_func(fillcolor, t, t));
                         LC->quadrilateral_unchecked(
                             (*(F[v_-1]))(t+dt),
                             (*(F[v_-1]))(t),
@@ -326,7 +326,7 @@ void Chip::color(
                         }
                         F[v_] = new Spline(P, Q, p1*(1.0f-v) - p2*v, q2*(1.0f-v) - q1*v);
                         for(float t = 0; t < .99; t += dt){
-                            LC->setcolor(color_func(color, t, v));
+                            LC->setcolor(color_func(fillcolor, t, v));
                             LC->quadrilateral_unchecked(
                                 (*(F[v_-1]))(t+dt),
                                 (*(F[v_-1]))(t),
@@ -377,7 +377,7 @@ void Chip::color(
                             -r1*v + q2*(1.0f-v)
                         );
                         for(float t = 0; t < .99; t += dt){
-                            LC->setcolor(color_func(color, t, v));
+                            LC->setcolor(color_func(fillcolor, t, v));
                             LC->quadrilateral_unchecked(
                                 (*(F[v_-1]))(t+dt),
                                 (*(F[v_-1]))(t),
