@@ -6,7 +6,6 @@ public:
     int from, to; //nodes indices
     int out, in; //the numbers of the connections in the nodes from and to.
     SplineConstruct S;
-    Edge(){};
     Edge(int from_, int to_, int out_, int in_, SplineConstruct S_){
         from = from_;
         to = to_;
@@ -14,29 +13,15 @@ public:
         in = in_;
         S = S_;
     };
-    bool operator==(Edge);
     bool equal(Edge*);
     std::string dbg(bool spline_dbg);
     virtual ~Edge(){};
 };
-std::string Edge::dbg(bool spline_dbg=false){
+std::string Edge::dbg(bool spline_dbg = false){
     stringstream result;
     result << "E(" << char(80 + from) << out << " -- " << char(80 + to) << in << ")";
     if(spline_dbg) result << ": " << S.dbg();
     return result.str();
-}
-bool Edge::operator==(Edge other){
-    return (
-        from == other.from &&
-        to   == other.to   &&
-        in   == other.in   &&
-        out  == other.out
-    ) || (
-        from == other.to   &&
-        to   == other.from &&
-        in   == other.out  &&
-        out  == other.in
-    );
 }
 bool Edge::equal(Edge* other){
     return (
@@ -63,11 +48,7 @@ public:
     bool edges_walked[4];
     bool flipped;
     int index = -1;
-    Node(){
-        for(int d = 0; d < 4; d++){
-            edges[d] = new Edge();
-        }
-    };
+    Node(){};
     Node(int index_, Vector value_, int p_, float t_, int q_, float u_, std::vector<Point>& points){
         index = index_;
         value = value_;
