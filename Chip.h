@@ -252,7 +252,9 @@ void Chip::color(
     make_edges(true);
     make_faces();
 
+    //the canvas LC is used several times to paint separate layers that are written to hard drive in between and then all loaded onto a BasicCanvas in the end
     LC = new LayeredCanvas();
+    //there will be as many layers as the maximum number of edges one face has (because for every edge there is a corner and corners overlap and are therefore written to separate layers)
     int max_edges = 0;
     for(int f = 0; f < faces.size(); f++){
         if(faces[f].size() > max_edges && faces[f].inside == 1){
@@ -260,30 +262,34 @@ void Chip::color(
         }
     }
     //variables for face coloring
-    SplineConstruct PQ, PR;
-    Spline QR = Spline(Vector(), Vector(), Vector(), Vector());
-    Edge* ePQ,* eQ_,* e_R,* eRP,* eQP;
     Vector P, Q, R;
     Vector p1, p2, q1, q2, r1, r2;
+    //the Splines that actually define the quadrilaterals (stored to be reusable for a whole row)
     Spline* F[v_prec];
+    //running variables: to from P (center of the corner) out to Q/R and v from PQ other PR
     float t, v;
     float dt = 1.0f/t_prec;
     float dv = 1.0f/v_prec;
+    //color_func writes to this
     colorint fillcolor[COLOR_LEN];
-    for(int e_LC = 0; e_LC < max_edges; e_LC++){
+    //readability variables
+    Face* face;
+    Edge* ePQ,* eQ_,* e_R,* eRP,* eQP,* ePP; //Edges from P to Q, Q to other, other to R, R to P, Q to P and P to P
+    //going through the layers, writing the corners and then saving and clearing the canvas
+    for(int layer = 0; layer < max_edges; layer++){
         for(int f = 0; f < faces.size(); f++){
-            if(!faces[f].inside) continue;
-            if(faces[f].size() == 1){
-                if(e_LC != 0) continue; //single loops only go to layer 0
-                if(dbg_file_lvl >= 2) std::cout << "color face " << faces[f].to_str() << " edge " << char(80 + faces[f][0]->from) << char(80 + faces[f][0]->to) << '\n';
-                P = nodes[faces[f][0]->from].value;
-                Q = faces[f][0]->S(.5);
-                p1 = faces[f][0]->S.dL(0);
-                p2 = faces[f][0]->S.dL(1);
-                q1 = faces[f][0]->S.dL(.5);
+            face = &(faces[f]);
+            if(!face->inside) continue;
+            if(face->size() == 1){
+                if(layer != 0) continue; //single-edges faces (loops) go to layer 0
+                ePP = face->at(0);
+                if(dbg_file_lvl >= 2) std::cout << "color face " << face->to_str() << " edge " << char(80 + ePP->from) << char(80 + ePP->to) << '\n';
+                P = nodes[ePP->from].value;
+                Q = ePP->S(.5);
+                p1 = ePP->S.dL(0);
+                p2 = ePP->S.dL(1);
+                q1 = ePP->S.dL(.5);
                 q2 = q1.mult_complex(Vector(0, -1)); //turn right 90°
-                PQ += Spline(P, Q, p1, q1);
-                PR += Spline(P, Q, -p2, -q1);
                 F[0] = new Spline(P, P, Vector(0, 0), Vector(0, 0));
                 for(int v_ = 1; v_ <= v_prec; v_++){
                     v = dv*v_;
@@ -300,17 +306,17 @@ void Chip::color(
                 }
                 if(dbg_file_lvl >= 4)
                     LC->write(
-                        filename+"_f"+_to_str(f)+"="+faces[f].to_str()+"_e"+char(80+faces[f][0]->from)+char(80+faces[f][0]->to)
+                        filename+"_f"+_to_str(f)+"="+face->to_str()+"_e"+char(80+ePP->from)+char(80+ePP->to)
                     );
                 continue;
-            }else if(faces[f].size() == 2){
-                if(dbg_file_lvl >= 2) std::cout << "color face " << faces[f].to_str() << '\n';
-                for(int e = 0; e < faces[f].size(); e++){
-                    if(e != e_LC) continue; //only edges of the same index as the current canvas layer are drawn
-                    if(dbg_file_lvl >= 2) std::cout << "  color by edge " << char(80 + faces[f][e]->from) << char(80 + faces[f][e]->to) << '\n';
+            }else if(face->size() == 2){
+                if(dbg_file_lvl >= 2) std::cout << "color face " << face->to_str() << '\n';
+                for(int e = 0; e < face->size(); e++){
+                    if(e != layer) continue; //only edges of the same index as the current canvas layer are drawn
+                    if(dbg_file_lvl >= 2) std::cout << "  color by edge " << char(80 + face->at(e)->from) << char(80 + face->at(e)->to) << '\n';
                     int g = (e + 1) % 2;
-                    ePQ = faces[f][e];
-                    eQP = faces[f][g];
+                    ePQ = face->at(e);
+                    eQP = face->at(g);
                     P = nodes[ePQ->from].value;
                     Q = nodes[eQP->from].value;
                     color_stripe(
@@ -322,22 +328,22 @@ void Chip::color(
                     );
                     if(dbg_file_lvl >= 4)
                         LC->write(
-                            filename+"_f"+_to_str(f)+"="+faces[f].to_str()+"_e"+char(80+faces[f][e]->from)+char(80+faces[f][e]->to)
+                            filename+"_f"+_to_str(f)+"="+face->to_str()+"_e"+char(80+face->at(e)->from)+char(80+face->at(e)->to)
                         );
                 }
                 continue;
             }else{
-                if(dbg_file_lvl >= 2) std::cout << "color face " << faces[f].to_str() << '\n';
-                for(int e = 0; e < faces[f].size(); e++){
-                    if(e != e_LC) continue; //only edges of the same index as the current canvas layer are drawn
-                    if(dbg_file_lvl >= 2) std::cout << "  color by edge " << char(80 + faces[f][e]->from) << char(80 + faces[f][e]->to) << '\n';
+                if(dbg_file_lvl >= 2) std::cout << "color face " << face->to_str() << '\n';
+                for(int e = 0; e < face->size(); e++){
+                    if(e != layer) continue; //only edges of the same index as the current canvas layer are drawn
+                    if(dbg_file_lvl >= 2) std::cout << "  color by edge " << char(80 + face->at(e)->from) << char(80 + face->at(e)->to) << '\n';
                     //edge from R to P
-                    ePQ = faces[f][e];
-                    eQ_ = faces[f][(e + 2*faces[f].size() + 1) % faces[f].size()];
-                    e_R = faces[f][(e + 2*faces[f].size() - 2) % faces[f].size()];
-                    eRP = faces[f][(e + 2*faces[f].size() - 1) % faces[f].size()];
-                    P = nodes[faces[f][e]->from].value;
-                    Q = nodes[faces[f][e]->to  ].value;
+                    ePQ = face->at(e);
+                    eQ_ = faces[f][(e + 2*face->size() + 1) % face->size()];
+                    e_R = face->at((e + 2*face->size() - 2) % face->size());
+                    eRP = face->at((e + 2*face->size() - 1) % face->size());
+                    P = nodes[face->at(e)->from].value;
+                    Q = nodes[face->at(e)->to  ].value;
                     R = nodes[    eRP    ->from].value;
                     color_stripe(
                         LC, t_prec, v_prec, color_func,
@@ -347,16 +353,16 @@ void Chip::color(
                         R, -eRP->S.dL(0),   e_R->S.dL(1)
                     );
                     if(dbg_file_lvl >= 4)
-                        LC->write(filename+"_f"+_to_str(f)+"="+faces[f].to_str()+"_e"+char(80+faces[f][e]->from)+char(80+faces[f][e]->to));
+                        LC->write(filename+"_f"+_to_str(f)+"="+face->to_str()+"_e"+char(80+face->at(e)->from)+char(80+face->at(e)->to));
                 }
             }
         }
         if(dbg_file_lvl >= 3){
-            std::cout << "written layer " << e_LC << " of " << max_edges << "; size == " << sizeof(BasicCanvas) << '\n';
-            LC->write(filename+"_layer"+_to_str(e_LC), *write_bg_color);
-            if(dbg_file_lvl >= 4) LC->dump(filename+"_layer"+_to_str(e_LC));
+            std::cout << "written layer " << layer << " of " << max_edges << "; size == " << sizeof(BasicCanvas) << '\n';
+            LC->write(filename+"_layer"+_to_str(layer), *write_bg_color);
+            if(dbg_file_lvl >= 4) LC->dump(filename+"_layer"+_to_str(layer));
         }
-        LC->save(filename+"_layer"+_to_str(e_LC));
+        LC->save(filename+"_layer"+_to_str(layer));
         LC->clear();
     }
     LC->clear();
