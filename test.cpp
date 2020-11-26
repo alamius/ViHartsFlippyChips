@@ -455,5 +455,33 @@ void test_PQR(
     std::cout << "test_PQR finished" << '\n';
     #endif
 }
+colorint* dbg_color_func(colorint result[COLOR_LEN], float t, float v){
+    make_color(
+        result,
+        255.0f*t,
+        255.0f*v,
+        0,
+        255
+    );
+    return result;
+}
+void test_color_stripe(){
+    LC = new LayeredCanvas();
+    Chip* chip = new Chip(std::vector<Point>());
+    Vector P = Vector(.7, .2), p1 = Vector( 0,  1), p2 = Vector( 0, 0);
+    Vector Q = Vector(.9, .5), q1 = Vector( 1,  0), q2 = Vector( 0, 1);
+    Vector R = Vector(.2, .5), r1 = Vector(-.3, 1), r2 = Vector( 0, 0);
+    Vector S = Vector(.5, .7), s1 = Vector( .3, 1), s2 = Vector(-1, 0);
+    chip->color_stripe(
+        LC, 10, 10, dbg_color_func,
+        P, p1, p2,
+        Q, q1, q2,
+        R, r1, r2,
+        S, s1, s2
+    );
+    LC->write("test_color_stripe");
+    delete chip;
+    delete LC;
+}
 
 #endif /* end of include guard: CHIPS_TESTS_CPP */
