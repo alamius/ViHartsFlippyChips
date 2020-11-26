@@ -179,15 +179,16 @@ private:
     //the faces of the chip with their edges
     std::vector<Face> faces;
 public:
-    //only copies the points
+    //copies the points
     Chip(std::vector<Point> points_);
-    //
+    //colors all faces that are Face::inside with t_prec*v_prec small quadrilaterals with color given by color_func(t, v)
     void color(
         int t_prec,
         int v_prec,
         colorint* (*color_func)(colorint result[COLOR_LEN], float t, float v),
         bool apply_gauss
     );
+    //colors a area defined by four Splines in t_prec*v_prec small quadrilaterals with color given by color_func(t, v)
     template <typename CanvasT>
     void color_stripe(
         CanvasT* C,
@@ -199,14 +200,20 @@ public:
         const Vector& R, const Vector& r1, const Vector& r2,
         const Vector& S, const Vector& s1, const Vector& s2
     );
+    //returns all intersections of the Line with itself. mistakes might be caused by Spline::intersect which has faults
     std::vector<Vector> intersect();
+    //returns all intersections of the Line with a straight line A + a*t for t in R
     std::vector<Vector> intersect_linear(Vector A, Vector a);
+    //subroutine of make_edges: takes intersection and follows the Line forewards of backwards
     void follow_edge(int p_curr, float t_curr, int sign, int d, int from, bool SplineConstruct_approximate);
+    //looks through all Nodes that are set by Chip::intersect and finds the Edges that connect them (every Node has four Edges)
     void make_edges(bool SplineConstruct_approximate);
-    void test_edges();
+    //goes through all Edges, following them and connecting them into faces
     void make_faces();
+    //draw the Line defined by Chip::points onto Canvas C
     template <typename CanvasT>
     void draw(CanvasT* C, int samples = 30);
+    //draw a net of the Line onto Canvas C
     template <typename CanvasT>
     void draw_net(
         CanvasT* C,
@@ -217,9 +224,12 @@ public:
         bool draw_E = true,
         bool draw_F = false
     );
+    //marking the private Chip::points on Canvas C
     template <typename CanvasT>
     void mark_points(CanvasT* C);
+    //transform all Points in Chip::points according to matrix
     void transform(float a, float b, float c, float d, float e, float f); // [x, y][[a, b], [c, d]] + [e, f]
+    //return a latex compatible text version of the Line
     std::string latex();
     std::string dbg(std::string indent);
     virtual ~Chip(){};
@@ -230,15 +240,18 @@ Chip::Chip(std::vector<Point> points_){
     }
 }
 void Chip::color(
-    int t_prec = 30,
-    int v_prec = 30,
-    colorint* (*color_func)(colorint result[COLOR_LEN], float t, float v) = &std_color_func,
-    bool apply_gauss = true
+    int t_prec = 30, //number of separate layers of quadrilaterals from the corner outwards
+    int v_prec = 30, //number of separate layers of quadrilaterals across one corner
+    colorint* (*color_func)(colorint result[COLOR_LEN], float t, float v) = &std_color_func, //tells the color for quadrilateral at (t, v)
+    bool apply_gauss = true //whether the resulting image should be passed through a gaussian filter
 ){
     intersect();
+    //catching unintersecting Line (error is printed by intersect)
     if(nodes.size() == 0) return;
+    //the boolean argument is SplineConstruct_approximate: whether the full SplineConstruct along one edge should be approximated by a Spline (currently needed because coloring uses Splines defined from dL(0) and dL(1))
     make_edges(true);
     make_faces();
+
     LC = new LayeredCanvas();
     int max_edges = 0;
     for(int f = 0; f < faces.size(); f++){
@@ -517,7 +530,7 @@ void Chip::follow_edge(int p_curr, float t_curr, int sign, int d, int from, bool
         done = false;
         m = 0;
         for(
-            //going through the nodes forward if following edge forwards else backwards
+            //going through the nodes forward ? if following edge forwards : else backwards
             m = (sign == +1) ? 0 : (nodes.size()-1);
             (
                 sign == +1 && m < nodes.size() ||
