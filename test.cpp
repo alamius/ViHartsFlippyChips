@@ -310,6 +310,15 @@ void test_knot_2(){
     std::cout << "chip:\n" << chip.dbg() << '\n';
     std::cout << "test_ABCDE finished" << '\n';
 }
+void test_double_chip(){
+    Chip chip = Chip({
+        Point(Vector(.1, .5), Vector( 0,  1.8)),
+        Point(Vector(.5, .2), Vector( .3,  0 )),
+        Point(Vector(.9, .5), Vector( 0, -1.8)),
+        Point(Vector(.5, .8), Vector(-.3,  0 ))
+    });
+    chip.color();
+}
 void test_P(){
     SplineConstruct O = SplineConstruct({
         Spline(
