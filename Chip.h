@@ -276,7 +276,6 @@ void Chip::color(
             max_edges = faces[f].size();
         }
     }
-    const int LC_len = max_edges;
     //variables for face coloring
     SplineConstruct PQ, PR;
     Spline QR = Spline(Vector(), Vector(), Vector(), Vector());
@@ -288,7 +287,7 @@ void Chip::color(
     float dt = 1.0f/t_prec;
     float dv = 1.0f/v_prec;
     colorint fillcolor[COLOR_LEN];
-    for(int e_LC = 0; e_LC < LC_len; e_LC++){
+    for(int e_LC = 0; e_LC < max_edges; e_LC++){
         for(int f = 0; f < faces.size(); f++){
             if(!faces[f].inside) continue;
             if(faces[f].size() == 1){
@@ -370,7 +369,7 @@ void Chip::color(
             }
         }
         if(dbg_file_lvl >= 3){
-            std::cout << "written layer " << e_LC << " of " << LC_len << "; size == " << sizeof(BasicCanvas) << '\n';
+            std::cout << "written layer " << e_LC << " of " << max_edges << "; size == " << sizeof(BasicCanvas) << '\n';
             LC->write(filename+"_layer"+_to_str(e_LC), *write_bg_color);
             if(dbg_file_lvl >= 4) LC->dump(filename+"_layer"+_to_str(e_LC));
         }
@@ -380,7 +379,7 @@ void Chip::color(
     LC->clear();
     if(dbg_file_lvl >= 2) std::cout << "adding image layers together:" << '\n';
     if(dbg_file_lvl >= 4) LC->dump(filename+"0_bg");
-    for(int bc = 0; bc < LC_len; bc++){
+    for(int bc = 0; bc < max_edges; bc++){
         LC->load(filename+"_layer"+_to_str(bc), 0, true);
         if(dbg_file_lvl >= 4) LC->dump(filename+_to_str(bc+1)+"_loaded");
     }
