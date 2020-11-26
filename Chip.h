@@ -196,6 +196,10 @@ colorint std_alpha_map(colorint alpha){
     }
 }
 
+Vector interpolate(Vector p, Vector q, float t){
+    return p * (1.0f - t) + q * t;
+}
+
 class Chip{
 private:
     //points (Vector of position and Vector of direction combined, defined in Spline.h) of the Chip. the line of the chip is the combination of the splines from every point to the next
@@ -421,8 +425,8 @@ void Chip::color_stripe(
         F[v_] = new Spline(
             PR->L(v),
             QS->L(v),
-            p1 * (1.0f - v) + r1 * v,
-            s1 * (1.0f - v) + s1 * v
+            interpolate(p1, r1, v),
+            interpolate(q1, s1, v)
         );
         for(float t = 0; t < .99; t += dt){
             C->setcolor(color_func(fillcolor, t, v));
