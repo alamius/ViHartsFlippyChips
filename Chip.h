@@ -416,7 +416,7 @@ void Chip::color_stripe(
             interpolate(p1, r1, v),
             interpolate(q1, s1, v)
         );
-        for(float t = 0; t < .99; t += dt){
+        for(float t = 0; t <= 1.0f-dt; t += dt){
             C->setcolor(color_func(fillcolor, t, v));
             C->quadrilateral_unchecked(
                 (*(F[v_-1]))(t+dt),
