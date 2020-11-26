@@ -208,7 +208,12 @@ public:
     //only copies the points
     Chip(std::vector<Point> points_);
     //
-    void color(int, int, colorint* (*)(colorint color[COLOR_LEN], float t, float v), bool apply_gauss);
+    void color(
+        int t_prec,
+        int v_prec,
+        colorint* (*color_func)(colorint result[COLOR_LEN], float t, float v),
+        bool apply_gauss
+    );
     std::vector<Vector> intersect();
     std::vector<Vector> intersect_linear(Vector A, Vector a);
     void follow_edge(int p_curr, float t_curr, int sign, int d, int from, bool SplineConstruct_approximate);
