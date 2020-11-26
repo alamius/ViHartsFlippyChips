@@ -154,10 +154,7 @@ colorint* std_color_func(colorint result[COLOR_LEN], float t, float v){
     make_color(
         result,
         255.0f*v,
-        //255.0f*(t*t*t*(1.0f-v) + v),
         255.0f*(1.0f - t)*(1.0f - t)
-        //255.0f*(1.0f-.99*(t*t*t*(1.0f-v) + v))
-        // 255.0f*pow(.01, t)
     );
     return result;
 }
@@ -212,7 +209,7 @@ public:
     void draw(CanvasT* C, int samples = 30);
     template <typename CanvasT>
     void draw_net(
-        CanvasT* C, // = (CanvasT*)NULL,
+        CanvasT* C,
         int t_prec = 5,
         int v_prec = 5,
         int face_from = 0,
@@ -438,7 +435,6 @@ std::vector<Vector> Chip::intersect(){
                 result.push_back(intersections[i].value);
                 if(dbg_file_lvl >= 4) std::cout << "      found: " << nodes_.back().dbg() << '\n';
             }
-            // getch();
         }
     }
     //sorting nodes_ to nodes: every node twice, sorted in as {value, p, t, q, u} and {value, q, u, p, t}
@@ -461,7 +457,6 @@ std::vector<Vector> Chip::intersect(){
         }
         nodes_[n].index = count;
         if(dbg_file_lvl >= 3) cout << "node " << n << ": index == " << count << std::endl;
-        // getch();
     }
     nodes = std::vector<Node>({nodes_[0]});
     bool inserted;
@@ -480,7 +475,6 @@ std::vector<Vector> Chip::intersect(){
         if(!inserted){
             nodes.push_back(to_insert);
         }
-        // getch();
     }
     if(dbg_file_lvl > 2){
         std::cout << "nodes:" << '\n';
@@ -607,7 +601,6 @@ void Chip::follow_edge(int p_curr, float t_curr, int sign, int d, int from, bool
                 ).subspline(t_curr, 1 * (sign == +1) + 0 * (sign == -1)),
                 (1 - t_curr) * (sign == +1) + t_curr * (sign == -1)
             );
-            // if(sign == -1) edge_curr.splines.back().flip();
             p_curr += sign + points.size(); //next along edge is previous if moving backwards
             p_curr %= points.size();
             t_curr = 0 * (sign == +1) + 1 * (sign == -1); //start of the spline if moving forewards, end of the spline if moving backwards
@@ -708,20 +701,6 @@ void Chip::make_faces(){
         }
     }
     //outer and inner faces
-    //finding outer face: most edges
-    // TODO !!!
-    // int max_edges = 0, max_f = 0;
-    // for(int f = 1; f < faces.size(); f++){
-    //     if(faces[f].size() > max_edges){
-    //         max_f = f;
-    //         max_edges = faces[f].size();
-    //     }
-    // }
-    // if(dbg_file_lvl >= 2) std::cout << "chosen face " << faces[max_f].to_str() << " as outer face." << '\n';
-    // faces[max_f].inside = 0;
-    // int f_done = max_f;
-    // bool done = false;
-    //
     //finding outer face: first intersection with line (0, 0)->(1, 1)
     std::vector<Node> diagonal_intersections;
     std::vector<Intersection> intersections;
@@ -729,18 +708,8 @@ void Chip::make_faces(){
     int min_n, min_e;
     for(int n = 0; n < nodes.size(); n++){
         for(int e = 2; e < 4; e++){
-            // if( //edge goes forward
-            //     (nodes[n].edges[e].p + 1) % points.size() ==
-            //     nodes[n].edges[e].p
-            // ) continue;
             intersections = nodes[n].edges[e]->S.intersect_linear(Vector(0, 0), Vector(1, 1));
             for(int i = 0; i < intersections.size(); i++){
-                // diagonal_intersections.push_back(Node(
-                //     intersections[i].value,
-                //     n, e,
-                //     intersections[i].t,
-                //     intersections[i].u
-                // ));
                 if(intersections[i].u < min_u){
                     min_u = intersections[i].u;
                     min_n = n;
@@ -1034,7 +1003,6 @@ void Chip::draw_net(
                 }
             }
             }
-            // getch();
         }
     }
 }
