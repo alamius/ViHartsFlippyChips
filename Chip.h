@@ -963,39 +963,39 @@ void Chip::draw_net(
                     F[0]->draw(C);
                 }
                 for(int v_ = 1; v_ <= v_prec; v_++){
-                v = dv*v_;
-                F[v_] = new Spline(
-                    P,
-                    QR(v),
-                    -p2*v + p1*(1.0f-v),
-                    -r1*v + q2*(1.0f-v)
-                );
-                if(drawing){
-                    F[v_]->draw(C);
-                    // for(float t = 0; t < 1; t += dt){
-                    //     BC->line((*(F[v_-1]))(t), (*(F[v_]))(t));
-                    // }
+                    v = dv*v_;
+                    F[v_] = new Spline(
+                        P,
+                        QR(v),
+                        -p2*v + p1*(1.0f-v),
+                        -r1*v + q2*(1.0f-v)
+                    );
+                    if(drawing){
+                        F[v_]->draw(C);
+                        // for(float t = 0; t < 1; t += dt){
+                        //     BC->line((*(F[v_-1]))(t), (*(F[v_]))(t));
+                        // }
+                    }
                 }
-            }
             }
             if(draw_E){
                 if(drawing) BC->setcolor(GREEN);
                 E[0] = new Spline(P, P, Vector(0, 0), Vector(0, 0));
                 for(int t_ = 1; t_ <= t_prec; t_++){
-                t = dt*t_;
-                E[t_] = new Spline(
-                    PQ(t),
-                    PR(t),
-                    (q1*t - p2*(1.0f-t))*t,
-                    (r2*t - p1*(1.0f-t))*t
-                );
-                if(drawing){
-                    E[t_]->draw(C);
-                //     for(float v = 0; v < 1; v += dv){
-                //         BC->line((*(E[t_-1]))(v), (*(E[t_]))(v));
-                //     }
+                    t = dt*t_;
+                    E[t_] = new Spline(
+                        PQ(t),
+                        PR(t),
+                        (q1*t - p2*(1.0f-t))*t,
+                        (r2*t - p1*(1.0f-t))*t
+                    );
+                    if(drawing){
+                        E[t_]->draw(C);
+                    //     for(float v = 0; v < 1; v += dv){
+                    //         BC->line((*(E[t_-1]))(v), (*(E[t_]))(v));
+                    //     }
+                    }
                 }
-            }
             }
         }
     }
