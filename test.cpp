@@ -376,9 +376,6 @@ void test_random(int n=5){
             chip.color(
 				50 * WIDTH/2000,
         		50 * WIDTH/2000,
-		        false, //draw_E
-		        true, //draw_F
-		        1, //pensize
         		&std_color_func, //color_func
 		        false //apply_gauss);
 			);

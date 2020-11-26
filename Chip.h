@@ -208,7 +208,7 @@ public:
     //only copies the points
     Chip(std::vector<Point> points_);
     //
-    void color(int, int, bool, bool, int, colorint* (*)(colorint color[COLOR_LEN], float t, float v), bool apply_gauss);
+    void color(int, int, colorint* (*)(colorint color[COLOR_LEN], float t, float v), bool apply_gauss);
     std::vector<Vector> intersect();
     std::vector<Vector> intersect_linear(Vector A, Vector a);
     void follow_edge(int p_curr, float t_curr, int sign, int d, int from, bool SplineConstruct_approximate);
@@ -242,9 +242,6 @@ Chip::Chip(std::vector<Point> points_){
 void Chip::color(
     int t_prec = 30,
     int v_prec = 30,
-    bool draw_E = false,
-    bool draw_F = true,
-    int pensize = 1,
     colorint* (*color_func)(colorint result[COLOR_LEN], float t, float v) = &std_color_func,
     bool apply_gauss = true
 ){
@@ -253,7 +250,6 @@ void Chip::color(
     make_edges(true);
     make_faces();
     LC = new LayeredCanvas();
-    LC->setpensize(pensize);
     int max_edges = 0;
     for(int f = 0; f < faces.size(); f++){
         if(faces[f].size() > max_edges && faces[f].inside == 1){
@@ -267,7 +263,6 @@ void Chip::color(
     Edge* ePQ,* eQ_,* e_R,* eRP;
     Vector P, Q, R;
     Vector p1, p2, q1, q2, r1, r2;
-    Spline* E[t_prec+1];
     Spline* F[v_prec];
     float t, v;
     float dt = 1.0f/t_prec;
@@ -277,7 +272,7 @@ void Chip::color(
         for(int f = 0; f < faces.size(); f++){
             if(!faces[f].inside) continue;
             if(faces[f].size() == 1){
-                if(e_LC != 0) continue; //only single loops go to layer 0
+                if(e_LC != 0) continue; //single loops only go to layer 0
                 if(dbg_file_lvl >= 2) std::cout << "color face " << faces[f].to_str() << " edge " << char(80 + faces[f][0]->from) << char(80 + faces[f][0]->to) << '\n';
                 P = nodes[faces[f][0]->from].value;
                 Q = faces[f][0]->S(.5);
@@ -287,49 +282,21 @@ void Chip::color(
                 q2 = q1.mult_complex(Vector(0, -1)); //turn right 90°
                 PQ += Spline(P, Q, p1, q1);
                 PR += Spline(P, Q, -p2, -q1);
-                if(draw_E){
-                    // LC->setcolor(GREEN);
-                    E[0] = new Spline(P, P, Vector(0, 0), Vector(0, 0));
-                    for(int t_ = 1; t_ <= t_prec; t_++){
-                        t = dt*t_;
-                        E[t_] = new Spline(
-                            PQ(t),
-                            PR(t),
-                            (PQ.dL(t).mult_complex(Vector(0, -1))),
-                            (PR.dL(t).mult_complex(Vector(0,  1)))
-                        );
-                        // E[t_]->draw(LC);
-                        for(float v = 0; v < 1; v += dv){
-                            LC->setcolor(color_func(color, t, v));
-                            LC->quadrilateral_unchecked(
-                                (*(E[t_-1]))(v+dv),
-                                (*(E[t_-1]))(v),
-                                (*(E[t_  ]))(v+dv),
-                                (*(E[t_  ]))(v)
-                            );
-                        }
+                F[0] = new Spline(P, P, Vector(0, 0), Vector(0, 0));
+                for(int v_ = 1; v_ <= v_prec; v_++){
+                    v = dv*v_;
+                    if(0 && nodes[faces[f][0]->from].index % 2 == 0){
+                        v = 1.0f - v;
                     }
-                }
-                if(draw_F){
-                    F[0] = new Spline(P, P, Vector(0, 0), Vector(0, 0));
-                    // LC->setcolor(BLUE);
-                    // F[0]->draw(LC);
-                    for(int v_ = 1; v_ <= v_prec; v_++){
-                        v = dv*v_;
-                        if(0 && nodes[faces[f][0]->from].index % 2 == 0){
-                            v = 1.0f - v;
-                        }
-                        F[v_] = new Spline(P, P, p1*v, p2*v);
-                        // F[v_]->draw(LC);
-                        for(float t = 0; t < 1; t += dt){
-                            LC->setcolor(color_func(color, t, t));
-                            LC->quadrilateral_unchecked(
-                                (*(F[v_-1]))(t+dt),
-                                (*(F[v_-1]))(t),
-                                (*(F[v_  ]))(t+dt),
-                                (*(F[v_  ]))(t)
-                            );
-                        }
+                    F[v_] = new Spline(P, P, p1*v, p2*v);
+                    for(float t = 0; t < 1; t += dt){
+                        LC->setcolor(color_func(color, t, t));
+                        LC->quadrilateral_unchecked(
+                            (*(F[v_-1]))(t+dt),
+                            (*(F[v_-1]))(t),
+                            (*(F[v_  ]))(t+dt),
+                            (*(F[v_  ]))(t)
+                        );
                     }
                 }
                 if(dbg_file_lvl >= 4)
@@ -343,59 +310,29 @@ void Chip::color(
                     if(e != e_LC) continue; //only edges of the same index as the current canvas layer are drawn
                     if(dbg_file_lvl >= 2) std::cout << "  color by edge " << char(80 + faces[f][e]->from) << char(80 + faces[f][e]->to) << '\n';
                     int g = (e + 1) % 2;
-                    if(1){
-                        P = nodes[faces[f][e]->from].value;
-                        Q = nodes[faces[f][g]->from].value;
-                        p1 = faces[f][e]->S.dL(0);
-                        p2 = faces[f][g]->S.dL(1);
-                        q1 = faces[f][g]->S.dL(0);
-                        q2 = faces[f][e]->S.dL(1);
-                        PQ = faces[f][e]->S;
-                        PR = faces[f][g]->S;
-                    }
-                    if(draw_E){
-                        // LC->setcolor(GREEN);
-                        E[0] = new Spline(P, P, Vector(0, 0), Vector(0, 0));
-                        for(int t_ = 1; t_ <= t_prec; t_++){
-                            t = dt*t_;
-                            E[t_] = new Spline(
-                                PQ(t),
-                                PR(t),
-                                (PQ.dL(t).mult_complex(Vector(0, -1))),
-                                (PR.dL(t).mult_complex(Vector(0,  1)))
-                            );
-                            // E[t_]->draw(LC);
-                            for(float v = 0; v < 1; v += dv){
-                                LC->setcolor(color_func(color, t, v));
-                                LC->quadrilateral_unchecked(
-                                    (*(E[t_-1]))(v+dv),
-                                    (*(E[t_-1]))(v),
-                                    (*(E[t_  ]))(v+dv),
-                                    (*(E[t_  ]))(v)
-                                );
-                            }
+                    P = nodes[faces[f][e]->from].value;
+                    Q = nodes[faces[f][g]->from].value;
+                    p1 = faces[f][e]->S.dL(0);
+                    p2 = faces[f][g]->S.dL(1);
+                    q1 = faces[f][g]->S.dL(0);
+                    q2 = faces[f][e]->S.dL(1);
+                    PQ = faces[f][e]->S;
+                    PR = faces[f][g]->S;
+                    F[0] = new Spline(P, Q, p1, q2);
+                    for(int v_ = 1; v_ <= v_prec; v_++){
+                        v = dv*v_;
+                        if(0 && nodes[faces[f][e]->from].index % 2 == 0){
+                            v = 1.0f - v;
                         }
-                    }
-                    if(draw_F){
-                        F[0] = new Spline(P, Q, p1, q2);
-                        // LC->setcolor(BLUE);
-                        // F[0]->draw(LC);
-                        for(int v_ = 1; v_ <= v_prec; v_++){
-                            v = dv*v_;
-                            if(0 && nodes[faces[f][e]->from].index % 2 == 0){
-                                v = 1.0f - v;
-                            }
-                            F[v_] = new Spline(P, Q, p1*(1.0f-v) - p2*v, q2*(1.0f-v) - q1*v);
-                            // F[v_]->draw(LC);
-                            for(float t = 0; t < .99; t += dt){
-                                LC->setcolor(color_func(color, t, v));
-                                LC->quadrilateral_unchecked(
-                                    (*(F[v_-1]))(t+dt),
-                                    (*(F[v_-1]))(t),
-                                    (*(F[v_  ]))(t+dt),
-                                    (*(F[v_  ]))(t)
-                                );
-                            }
+                        F[v_] = new Spline(P, Q, p1*(1.0f-v) - p2*v, q2*(1.0f-v) - q1*v);
+                        for(float t = 0; t < .99; t += dt){
+                            LC->setcolor(color_func(color, t, v));
+                            LC->quadrilateral_unchecked(
+                                (*(F[v_-1]))(t+dt),
+                                (*(F[v_-1]))(t),
+                                (*(F[v_  ]))(t+dt),
+                                (*(F[v_  ]))(t)
+                            );
                         }
                     }
                     if(dbg_file_lvl >= 4)
@@ -410,75 +347,43 @@ void Chip::color(
                     if(e != e_LC) continue; //only edges of the same index as the current canvas layer are drawn
                     if(dbg_file_lvl >= 2) std::cout << "  color by edge " << char(80 + faces[f][e]->from) << char(80 + faces[f][e]->to) << '\n';
                     //edge from R to P
-                    if(1){
-                        ePQ = faces[f][e];
-                        eQ_ = faces[f][(e + 2*faces[f].size() + 1) % faces[f].size()];
-                        e_R = faces[f][(e + 2*faces[f].size() - 2) % faces[f].size()];
-                        eRP = faces[f][(e + 2*faces[f].size() - 1) % faces[f].size()];
-                        P = nodes[faces[f][e]->from].value;
-                        Q = nodes[faces[f][e]->to  ].value;
-                        R = nodes[    eRP    ->from].value;
-                        p1 = ePQ->S.dL(0);
-                        p2 = eRP->S.dL(1);
-                        q1 = eQ_->S.dL(0);
-                        q2 = ePQ->S.dL(1);
-                        r1 = eRP->S.dL(0);
-                        r2 = e_R->S.dL(1);
-                        PQ = faces[f][e]->S;
-                        PR = eRP->S;
-                        PR.flip();
-                        QR = Spline(Q, R, q1, r2);
-                    }
-                    if(draw_E){
-                        // LC->setcolor(GREEN);
-                        E[0] = new Spline(P, P, Vector(0, 0), Vector(0, 0));
-                        for(int t_ = 1; t_ <= t_prec; t_++){
-                            t = dt*t_;
-                            E[t_] = new Spline(
-                                PQ(t),
-                                PR(t),
-                                (q1*t - p2*(1.0f-t))*t,
-                                (r2*t - p1*(1.0f-t))*t
-                            );
-                            // if(drawing){
-                            // E[t_]->draw(LC);
-                            for(float v = 0; v < 1; v += dv){
-                                LC->setcolor(color_func(color, t, v));
-                                LC->quadrilateral_unchecked(
-                                    (*(E[t_-1]))(v+dv),
-                                    (*(E[t_-1]))(v),
-                                    (*(E[t_  ]))(v+dv),
-                                    (*(E[t_  ]))(v)
-                                );
-                            }
+                    ePQ = faces[f][e];
+                    eQ_ = faces[f][(e + 2*faces[f].size() + 1) % faces[f].size()];
+                    e_R = faces[f][(e + 2*faces[f].size() - 2) % faces[f].size()];
+                    eRP = faces[f][(e + 2*faces[f].size() - 1) % faces[f].size()];
+                    P = nodes[faces[f][e]->from].value;
+                    Q = nodes[faces[f][e]->to  ].value;
+                    R = nodes[    eRP    ->from].value;
+                    p1 = ePQ->S.dL(0);
+                    p2 = eRP->S.dL(1);
+                    q1 = eQ_->S.dL(0);
+                    q2 = ePQ->S.dL(1);
+                    r1 = eRP->S.dL(0);
+                    r2 = e_R->S.dL(1);
+                    PQ = faces[f][e]->S;
+                    PR = eRP->S;
+                    PR.flip();
+                    QR = Spline(Q, R, q1, r2);
+                    F[0] = new Spline(P, QR(0), p1, q2);
+                    for(int v_ = 1; v_ <= v_prec; v_++){
+                        v = dv*v_;
+                        if(0 && nodes[faces[f][e]->from].index % 2 == 0){
+                            v = 1.0f - v;
                         }
-                    }
-                    if(draw_F){
-                        F[0] = new Spline(P, QR(0), p1, q2);
-                        // LC->setcolor(BLUE);
-                        // F[0]->draw(LC);
-                        for(int v_ = 1; v_ <= v_prec; v_++){
-                            v = dv*v_;
-                            if(0 && nodes[faces[f][e]->from].index % 2 == 0){
-                                v = 1.0f - v;
-                            }
-                            F[v_] = new Spline(
-                                P,
-                                QR(v),
-                                -p2*v + p1*(1.0f-v),
-                                -r1*v + q2*(1.0f-v)
+                        F[v_] = new Spline(
+                            P,
+                            QR(v),
+                            -p2*v + p1*(1.0f-v),
+                            -r1*v + q2*(1.0f-v)
+                        );
+                        for(float t = 0; t < .99; t += dt){
+                            LC->setcolor(color_func(color, t, v));
+                            LC->quadrilateral_unchecked(
+                                (*(F[v_-1]))(t+dt),
+                                (*(F[v_-1]))(t),
+                                (*(F[v_  ]))(t+dt),
+                                (*(F[v_  ]))(t)
                             );
-                            // F[v_]->draw(LC);
-                            for(float t = 0; t < .99; t += dt){
-                                LC->setcolor(color_func(color, t, v));
-                                LC->quadrilateral_unchecked(
-                                    (*(F[v_-1]))(t+dt),
-                                    (*(F[v_-1]))(t),
-                                    (*(F[v_  ]))(t+dt),
-                                    (*(F[v_  ]))(t)
-                                );
-                                // LC->line((*(F[v_-1]))(t), (*(F[v_]))(t));
-                            }
                         }
                     }
                     if(dbg_file_lvl >= 4)

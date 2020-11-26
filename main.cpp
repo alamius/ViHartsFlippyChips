@@ -337,9 +337,6 @@ int main(int argc, char const *argv[]){
                 chip->color(
                     t_prec * WIDTH/2000,
                     50 * WIDTH/2000,
-                    false, //draw_E
-                    true, //draw_F
-                    1, //pensize
                     &std_color_func, //color_func
                     apply_gauss //apply_gauss
                 );
