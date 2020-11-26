@@ -276,7 +276,7 @@ void Chip::color(
     //variables for face coloring
     SplineConstruct PQ, PR;
     Spline QR = Spline(Vector(), Vector(), Vector(), Vector());
-    Edge* ePQ,* eQ_,* e_R,* eRP;
+    Edge* ePQ,* eQ_,* e_R,* eRP,* eQP;
     Vector P, Q, R;
     Vector p1, p2, q1, q2, r1, r2;
     Spline* F[v_prec];
@@ -323,28 +323,17 @@ void Chip::color(
                     if(e != e_LC) continue; //only edges of the same index as the current canvas layer are drawn
                     if(dbg_file_lvl >= 2) std::cout << "  color by edge " << char(80 + faces[f][e]->from) << char(80 + faces[f][e]->to) << '\n';
                     int g = (e + 1) % 2;
-                    P = nodes[faces[f][e]->from].value;
-                    Q = nodes[faces[f][g]->from].value;
-                    p1 = faces[f][e]->S.dL(0);
-                    p2 = faces[f][g]->S.dL(1);
-                    q1 = faces[f][g]->S.dL(0);
-                    q2 = faces[f][e]->S.dL(1);
-                    PQ = faces[f][e]->S;
-                    PR = faces[f][g]->S;
-                    F[0] = new Spline(P, Q, p1, q2);
-                    for(int v_ = 1; v_ <= v_prec; v_++){
-                        v = dv*v_;
-                        F[v_] = new Spline(P, Q, p1*(1.0f-v) - p2*v, q2*(1.0f-v) - q1*v);
-                        for(float t = 0; t < .99; t += dt){
-                            LC->setcolor(color_func(fillcolor, t, v));
-                            LC->quadrilateral_unchecked(
-                                (*(F[v_-1]))(t+dt),
-                                (*(F[v_-1]))(t),
-                                (*(F[v_  ]))(t+dt),
-                                (*(F[v_  ]))(t)
-                            );
-                        }
-                    }
+                    ePQ = faces[f][e];
+                    eQP = faces[f][g];
+                    P = nodes[ePQ->from].value;
+                    Q = nodes[eQP->from].value;
+                    color_stripe(
+                        LC, t_prec, v_prec, color_func,
+                        P,  ePQ->S.dL(0), Vector(0, 0),
+                        Q,  ePQ->S.dL(1), Vector(0, 0),
+                        P, -eQP->S.dL(1), Vector(0, 0),
+                        Q, -eQP->S.dL(0), Vector(0, 0)
+                    );
                     if(dbg_file_lvl >= 4)
                         LC->write(
                             filename+"_f"+_to_str(f)+"="+faces[f].to_str()+"_e"+char(80+faces[f][e]->from)+char(80+faces[f][e]->to)
@@ -364,35 +353,13 @@ void Chip::color(
                     P = nodes[faces[f][e]->from].value;
                     Q = nodes[faces[f][e]->to  ].value;
                     R = nodes[    eRP    ->from].value;
-                    p1 = ePQ->S.dL(0);
-                    p2 = eRP->S.dL(1);
-                    q1 = eQ_->S.dL(0);
-                    q2 = ePQ->S.dL(1);
-                    r1 = eRP->S.dL(0);
-                    r2 = e_R->S.dL(1);
-                    PQ = faces[f][e]->S;
-                    PR = eRP->S;
-                    PR.flip();
-                    QR = Spline(Q, R, q1, r2);
-                    F[0] = new Spline(P, QR(0), p1, q2);
-                    for(int v_ = 1; v_ <= v_prec; v_++){
-                        v = dv*v_;
-                        F[v_] = new Spline(
-                            P,
-                            QR(v),
-                            -p2*v + p1*(1.0f-v),
-                            -r1*v + q2*(1.0f-v)
-                        );
-                        for(float t = 0; t < .99; t += dt){
-                            LC->setcolor(color_func(fillcolor, t, v));
-                            LC->quadrilateral_unchecked(
-                                (*(F[v_-1]))(t+dt),
-                                (*(F[v_-1]))(t),
-                                (*(F[v_  ]))(t+dt),
-                                (*(F[v_  ]))(t)
-                            );
-                        }
-                    }
+                    color_stripe(
+                        LC, t_prec, v_prec, color_func,
+                        P,  ePQ->S.dL(0),   Vector(0, 0),
+                        Q,  ePQ->S.dL(1),   eQ_->S.dL(0),
+                        P, -eRP->S.dL(1),   Vector(0, 0),
+                        R, -eRP->S.dL(0),   e_R->S.dL(1)
+                    );
                     if(dbg_file_lvl >= 4)
                         LC->write(filename+"_f"+_to_str(f)+"="+faces[f].to_str()+"_e"+char(80+faces[f][e]->from)+char(80+faces[f][e]->to));
                 }
