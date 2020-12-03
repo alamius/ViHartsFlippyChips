@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <iostream>
 // #include <graphics.h>
-#include <chrono>
-#include <thread>
 #include <vector>
 #include <random>
 
