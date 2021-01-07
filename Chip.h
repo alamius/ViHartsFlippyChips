@@ -704,7 +704,7 @@ void Chip::make_faces(){
     //finding outer face: first intersection with line (0, 0)->(1, 1)
     std::vector<Node> diagonal_intersections;
     std::vector<Intersection> intersections;
-    float min_u = 2;
+    float min_u = 2, min_t;
     int min_n, min_e;
     for(int n = 0; n < nodes.size(); n++){
         for(int e = 2; e < 4; e++){
@@ -712,6 +712,7 @@ void Chip::make_faces(){
             for(int i = 0; i < intersections.size(); i++){
                 if(intersections[i].u < min_u){
                     min_u = intersections[i].u;
+                    min_t = intersections[i].t;
                     min_n = n;
                     min_e = e;
                 }
@@ -722,12 +723,18 @@ void Chip::make_faces(){
         std::cerr << "there were no intersections with line x == y, please check the spline and, if needed, change the algorithm to search on other lines!" << '\n';
         return;
     }
+    std::cout << "Chip::make_faces(): closest edge: " << nodes[min_n].edges[min_e]->dbg() << '\n';
+    //if the detected edge comes from below the straight line and goes above it,
+    //    it must be the outside facing edge, the same edge going the other way is part of an inside face then.
+    Vector before_intersect = nodes[min_n].edges[min_e]->S(min_t - .02); //Vector along the edge, just before the intersection
+    bool outside = before_intersect.y < before_intersect.x; //is below Line x == y
+
     int f_done;
     bool done = false;
     for(int f = 0; f < faces.size(); f++){
         for(int e = 0; e < faces[f].size(); e++){
             if(faces[f][e] == nodes[min_n].edges[min_e]){
-                faces[f].inside = 0;
+                faces[f].inside = !outside;
                 f_done = f;
                 done = true;
                 break;
@@ -747,7 +754,12 @@ void Chip::make_faces(){
         }
     }
     std::vector<int> inside_faces = {};
-    std::vector<int> outside_faces = {f_done};
+    std::vector<int> outside_faces = {};
+    if(outside){
+        outside_faces.push_back(f_done);
+    }else{
+        inside_faces.push_back(f_done);
+    }
     // bool done;
     while(all_faces.size() > 0){
         for(int f : all_faces){
@@ -771,6 +783,7 @@ void Chip::make_faces(){
                     }
                     if(done) break;
                 }
+                if(done) break;
                 for(int f_out : outside_faces){
                     for(int e_out = 0; e_out < faces[f_out].size(); e_out++){
                         if(dbg_file_lvl >= 5) std::cout << "  faces[" << f << "][" << e << "] == faces[" << f_out << "][" << e_out << "]: " << faces[f][e]->dbg() << " == " << faces[f_out][e_out]->dbg() << ": " << (faces[f][e]->equal(faces[f_out][e_out])) << '\n';
