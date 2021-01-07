@@ -361,17 +361,17 @@ int main(int argc, char const *argv[]){
                     std::cout << argument_message(arg) << "using standard regular with 3 points, use --regular=<n> for others." << '\n';
                     regular = 3;
                 }
-                int P = 5;
+                int P = regular;
                 float t;
                 for(int p = 0; p < P; p++){
                     t = M_PI * 2 * p / P;
                     points.push_back(Point(
                         Vector(
-                            -sin(t*4)/6 + sin(t)/4 + .5,
-                            cos(t*4)/6 + cos(t)/4 + .5
+                            -sin(t*(P-1))/6 + sin(t)/4 + .5,
+                            cos( t*(P-1))/6 + cos(t)/4 + .5
                         ), Vector(
-                            -cos(t*4)*4/6 + cos(t)/4,
-                            -sin(t*4)*4/6 - sin(t)/4
+                            -cos(t*(P-1))*4/6 + cos(t)/4,
+                            -sin(t*(P-1))*4/6 - sin(t)/4
                         )*regular_factor
                     ));
                 }
