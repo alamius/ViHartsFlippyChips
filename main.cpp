@@ -408,7 +408,9 @@ int main(int argc, char const *argv[]){
                 }else{
                     dbg_file_lvl = 1;
                 }
-                std::cout << "using dbg level " << dbg_file_lvl << "." << '\n';
+                std::cout << argument_message(arg) << "using dbg level " << dbg_file_lvl << "." << '\n';
+            }else{
+                std::cerr << argument_message(arg) << "the option '" << arg << "' was not understood!" << '\n';
             }
         }else{
             filename = arg;
