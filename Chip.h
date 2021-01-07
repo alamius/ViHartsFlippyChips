@@ -723,7 +723,7 @@ void Chip::make_faces(){
         std::cerr << "Chip::make_faces(): there were no intersections with line x == y, please check the spline and, if needed, change the algorithm to search on other lines!" << '\n';
         return;
     }
-    std::cout << "Chip::make_faces(): closest edge: " << nodes[min_n].edges[min_e]->dbg() << '\n';
+    if(dbg_file_lvl >= 2) std::cout << "Chip::make_faces(): closest edge: " << nodes[min_n].edges[min_e]->dbg() << '\n';
     //if the detected edge comes from below the straight line and goes above it,
     //    it must be the outside facing edge, the same edge going the other way is part of an inside face then.
     Vector before_intersect = nodes[min_n].edges[min_e]->S(min_t - .02); //Vector along the edge, just before the intersection
