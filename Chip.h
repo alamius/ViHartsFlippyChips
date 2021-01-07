@@ -720,7 +720,7 @@ void Chip::make_faces(){
         }
     }
     if(min_u == 2){
-        std::cerr << "there were no intersections with line x == y, please check the spline and, if needed, change the algorithm to search on other lines!" << '\n';
+        std::cerr << "Chip::make_faces(): there were no intersections with line x == y, please check the spline and, if needed, change the algorithm to search on other lines!" << '\n';
         return;
     }
     std::cout << "Chip::make_faces(): closest edge: " << nodes[min_n].edges[min_e]->dbg() << '\n';
@@ -743,13 +743,13 @@ void Chip::make_faces(){
         if(done) break;
     }
     if(!done){
-        std::cerr << "first face not found again!" << '\n';
+        std::cerr << "Chip::make_faces(): first face not found! this is a bug!" << '\n';
         return;
     }
 
     std::vector<int> all_faces;
     for(int f = 0; f < faces.size(); f++){
-        if(f != f_done){ //not decided
+        if(f != f_done){ //only undecided go into all_faces
             all_faces.push_back(f);
         }
     }
