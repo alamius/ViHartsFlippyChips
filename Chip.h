@@ -650,7 +650,7 @@ void Chip::make_edges(bool SplineConstruct_approximate = true){
             //d == 3: following .p backwards
             follow_edge(nodes[n].p, nodes[n].t, -1, 3, n, SplineConstruct_approximate);
         }
-        if(dbg_file_lvl >= 2) std::cout << '\n';
+        if(dbg_file_lvl >= 3) std::cout << '\n';
     }
 }
 void Chip::make_faces(){
