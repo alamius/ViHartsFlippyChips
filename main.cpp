@@ -314,6 +314,7 @@ int main(int argc, char const *argv[]){
                 if(is_key(arg, "chip-file")){
                     if(is_key(arg, "chip-file=")){
                         std::string chip_file_name = get_string(arg);
+                        std::cout << argument_message(arg) << "file name read as: '" << chip_file_name << "'\n";
                         std::ifstream chip_file(chip_file_name, std::ios::in);
                         if(chip_file.is_open()){
                             std::string line;
@@ -322,22 +323,22 @@ int main(int argc, char const *argv[]){
                             }
                             chip_file.close();
                         }else{
-                            std::cerr << "Unable to open file " << chip_file_name << "\n";
+                            std::cerr << argument_message(arg) << "Unable to open file '" << chip_file_name << "'\n";
                             continue;
                         }
                         points = to_Points(values);
                         for(int i = 0; i < values.size(); i++){
-                            std::cout << "values[" << i << "] == " << values[i] << " -> " << points[i].dbg() << '\n';
+                            std::cout << argument_message(arg) << "values[" << i << "]: " << values[i] << " -> " << points[i].dbg() << '\n';
                         }
                     }else{
-                        std::cout << "--chip-file must get an argument: --chip-file=file1\n";
+                        std::cerr << argument_message(arg) << "must get an argument: --chip-file=<file1>\n";
                     }
                 }else{
                     if(is_key(arg, "chip=")){
                         values = get_values(arg, ',');
                         points = to_Points(values);
                         for(int i = 0; i < values.size(); i++){
-                            std::cout << "values[" << i << "] == " << values[i] << " -> " << points[i].dbg() << '\n';
+                            std::cout << argument_message(arg) << "values[" << i << "] == " << values[i] << " -> " << points[i].dbg() << '\n';
                         }
                     }else{
                         points.push_back(Point(Vector(.45, .7), Vector(-1, 0)));
@@ -345,17 +346,19 @@ int main(int argc, char const *argv[]){
                         points.push_back(Point(Vector(.45, .1), Vector( 1, 0)));
                         points.push_back(Point(Vector(.75, .9), Vector(-1, 0)));
                         points.push_back(Point(Vector(.75, .1), Vector( 1, 0)));
+                        std::cout << argument_message(arg) << "using standard Chip Points" << '\n';
                     }
                 }
                 chip = new Chip(points);
-                std::cout << chip->dbg() << '\n';
+                std::cout << argument_message(arg) << "defined Chip as: " << chip->dbg() << '\n';
             }else if(is_key(arg, "regular-factor=")){
                 regular_factor = get_float(arg);
-                std::cout << "using regular-factor " << regular_factor << " (must be set before --regular!)" << '\n';
+                std::cout << argument_message(arg) << "using regular factor " << regular_factor << " (must be set before --regular!)" << '\n';
             }else if(is_key(arg, "regular")){
                 if(is_key(arg, "regular=")){
                     regular = get_int(arg);
                 }else{
+                    std::cout << argument_message(arg) << "using standard regular with 3 points, use --regular=<n> for others." << '\n';
                     regular = 3;
                 }
                 int P = 5;
@@ -372,11 +375,11 @@ int main(int argc, char const *argv[]){
                         )*regular_factor
                     ));
                 }
-                std::cout << "using regular with " << regular << " points. (subsequent --chip* overwrites this again!)" << '\n';
+                std::cout << argument_message(arg) << "using regular Chip with " << regular << " points. (subsequent --chip* overwrites this again!)" << '\n';
                 chip = new Chip(points);
             }else if(is_key(arg, "color")){
                 if(chip == NULL){
-                    std::cerr << "arg '" << arg << "' called without chip! create one with --chip argument." << '\n';
+                    std::cerr << argument_message(arg) << "called without Chip! create one with --chip* or --regular before this option." << '\n';
                     exit(1);
                 }
                 chip->color(
@@ -387,17 +390,17 @@ int main(int argc, char const *argv[]){
                 );
             }else if(is_key(arg, "draw")){
                 if(chip == NULL){
-                    std::cerr << "arg '" << arg << "' called without chip! create one with --chip argument." << '\n';
+                    std::cerr << argument_message(arg) << "called without Chip! create one with --chip* or --regular before this option." << '\n';
                     exit(1);
                 }
                 BC = new BasicCanvas();
                 chip->draw(BC);
                 BC->write(filename+".draw");
             }else if(is_key(arg, "gauss")){
-                std::cout << "using gauss." << '\n';
+                std::cout << argument_message(arg) << "using gauss." << '\n';
                 apply_gauss = true;
             }else if(is_key(arg, "no-gauss")){
-                std::cout << "not using gauss." << '\n';
+                std::cout << argument_message(arg) << "not using gauss." << '\n';
                 apply_gauss = false;
             }else if(is_key(arg, "dbg")){
                 if(is_key(arg, "dbg=")){
@@ -409,7 +412,7 @@ int main(int argc, char const *argv[]){
             }
         }else{
             filename = arg;
-            std::cout << "output file set to '" << filename << "'\n";
+            std::cout << argument_message(arg) << "output file set to '" << filename << "'\n";
         }
     }
     std::cout << "finished" << '\n';
