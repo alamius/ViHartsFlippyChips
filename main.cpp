@@ -235,6 +235,20 @@ std::vector<Point> to_Points(std::vector<std::string> values){
     return result;
 }
 
+static const int argument_spacing = 20;
+std::string argument_message(std::string arg, int arg_spacing = argument_spacing, std::string message = ""){
+    for(int i = 0; i < arg.size(); i++){
+        if(arg[i] == '='){
+            arg = arg.substr(0, i);
+        }
+    }
+    std::string result = arg + ":";
+    while(result.size() < arg_spacing){
+        result += " ";
+    }
+    result += message;
+    return result;
+}
 const std::string help = "command line options of chip:\n"
     "<filename>          sets the filename under which the output is written\n"
     "--chip              uses a predefined Chip\n"
