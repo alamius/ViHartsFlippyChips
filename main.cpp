@@ -235,6 +235,33 @@ std::vector<Point> to_Points(std::vector<std::string> values){
     return result;
 }
 
+const std::string help = "command line options of chip:\n"
+    "<filename>          sets the filename under which the output is written\n"
+    "--chip              uses a predefined Chip\n"
+    "--chip=<values>     uses the values for the Points of the Chip, see --help-chip-values for details\n"
+    "--chip-file=<file>  reads <file> as values\n"
+    "--color             colors and exports the created Chip to <filename>.ppm\n"
+    "--draw              draws and exports the outline of the created Chip to <filename>.draw.ppm\n"
+    "--gauss             activates gaussian blurring for the subsequent images; deactivate with --no-gauss\n"
+    "--help              prints this help\n"
+    "--help-chip-values  explains the use of in-line chip values (also applicable to chip files)\n"
+    "--regular[=<n>]     creates a regular <n>-faced Chip\n"
+    "--regular-factor=<f>sets the factor for the direction vectors of the n-faced Chip to <f>, use before --regular!\n"
+    "--dbg[=<n>]         sets the debug level to <n> (0 to 5, where 5 is super verbose)\n"
+;
+
+const std::string help_chip_values = "using chip values:\n"
+    "general form:      .012.345->.-67.-89[*1[.23]] (.- means either . or -)\n"
+    "as regex:          [.-]\\d+[.-]\\d+->[.+]\\d[.+]\\d<\\*\\d+<.\\d+>> (<...> is optional)\n"
+    "example:           .15.85->.3-3*5.5\n"
+    "meaning:           a 2d vector (.15, .85), followed by a 2d direction (.3, -.3), optionally scaled by an arbitrary number (5.5)\n"
+    "negative numbers:  .75 is 0.75 while -75 is -0.75, so the - replaces the . \n"
+    "                   as no values with an absolute greater than 1 are allowed \n"
+    "                   (thats the reason for the weird factor)\n"
+    "ranges:            the first vector (before ->) must always be in [0, 1]×[0, 1]\n"
+    "                   the second is free\n"
+;
+
 int main(int argc, char const *argv[]){
     colors_init();
     #if COLOR_LEN == 4
@@ -263,7 +290,13 @@ int main(int argc, char const *argv[]){
     for(int a = 1; a < argc; a++){
         arg = argv[a];
         if(arg.substr(0, 2) == "--"){
-            if(is_key(arg, "chip")){
+            if(is_key(arg, "help")){
+                if(is_key(arg, "help-chip-values")){
+                    std::cout << help_chip_values << '\n';
+                }else{
+                    std::cout << help << '\n';
+                }
+            }else if(is_key(arg, "chip")){
                 if(is_key(arg, "chip-file")){
                     if(is_key(arg, "chip-file=")){
                         std::string chip_file_name = get_string(arg);
