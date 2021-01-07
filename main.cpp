@@ -385,8 +385,8 @@ int main(int argc, char const *argv[]){
                 chip->color(
                     t_prec * WIDTH/2000,
                     50 * WIDTH/2000,
-                    &std_color_func, //color_func
-                    apply_gauss //apply_gauss
+                    &std_color_func,
+                    apply_gauss
                 );
             }else if(is_key(arg, "draw")){
                 if(chip == NULL){
