@@ -40,3 +40,5 @@ clear:
 
 clean:
 	rm -f *.output *.o *.gch
+	cd include/canvas/; make clean
+	cd include/spline/; make clean
