@@ -11,16 +11,6 @@
 // #include <graphics.utils.h>
 // #include <mouse.h>
 
-//for include/canvas_color.h used by include/basic_canvas.h and include/canvas_layered.h
-#ifndef COLOR_LEN
-#define COLOR_LEN 4
-#endif
-
-//for include/canvas_kernel.h
-#ifndef CANVAS_KERNEL_SIZE
-#define CANVAS_KERNEL_SIZE 9
-#endif
-
 #include "include/canvas/BasicCanvas.hpp"
 #include "include/canvas/LayeredCanvas.hpp"
 #include "define.h"
