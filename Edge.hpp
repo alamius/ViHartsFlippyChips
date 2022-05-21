@@ -1,6 +1,8 @@
 #ifndef EDGE_HPP
 #define EDGE_HPP
 
+#include "include/spline/SplineConstruct.hpp"
+
 class Edge{
 public:
 	int from, to; //nodes indices
@@ -14,28 +16,9 @@ public:
 		S = S_;
 	};
 	bool equal(Edge*);
-	std::string dbg(bool spline_dbg);
+	std::string dbg(bool spline_dbg = false);
 	virtual ~Edge(){};
 };
-std::string Edge::dbg(bool spline_dbg = false){
-	stringstream result;
-	result << "E(" << char(80 + from) << out << " -- " << char(80 + to) << in << ")";
-	if(spline_dbg) result << ": " << S.dbg();
-	return result.str();
-}
-bool Edge::equal(Edge* other){
-	return (
-		from == other->from &&
-		to   == other->to   &&
-		in   == other->in   &&
-		out  == other->out
-	) || (
-		from == other->to   &&
-		to   == other->from &&
-		in   == other->out  &&
-		out  == other->in
-	);
-}
 
 
 #endif /* end of include guard: EDGE_HPP */
