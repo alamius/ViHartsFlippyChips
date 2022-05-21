@@ -1,16 +1,15 @@
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
 // #include <graphics.h>
 #include <vector>
 #include <random>
 
 //own
-#include <Vector.h>
-static int dbg_file_lvl = 0;
-#include <utils.random.h>
+#include "include/canvas/Vector.hpp"
+#include "include/utils.random.h"
 // #include <graphics.utils.h>
 // #include <mouse.h>
-const unsigned int WIDTH = 2000, HEIGHT = 1600;
 
 //for include/canvas_color.h used by include/basic_canvas.h and include/canvas_layered.h
 #ifndef COLOR_LEN
@@ -22,18 +21,19 @@ const unsigned int WIDTH = 2000, HEIGHT = 1600;
 #define CANVAS_KERNEL_SIZE 9
 #endif
 
-#include <basic_canvas.h>
-#include <canvas_layered.h>
+#include "include/canvas/BasicCanvas.hpp"
+#include "include/canvas/LayeredCanvas.hpp"
+#include "define.h"
 BasicCanvas* BC;
 LayeredCanvas* LC;
-#include "canvas.include.h"
-const bool drawing = 1;
+#include "canvas.include.hpp"
 
-#include <Spline.h>
+#include "include/spline/Spline.hpp"
 std::string filename;
+int dbg_file_lvl = 0;
 colorint (*write_bg_color)[COLOR_LEN];
-#include "Chip.h"
-#include "test.cpp"
+#include "Chip.hpp"
+// #include "test.cpp"
 #include "Commandline.hpp"
 
 int main(int argc, char const *argv[]){
