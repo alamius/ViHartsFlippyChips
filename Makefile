@@ -30,15 +30,16 @@ chips: $(DEPENDS) $(OBJECTS)
 	$(CC) -o chips $(OBJECTS)
 
 test: chips
-	$(TARGET) --chip --color $(IMAGE)
-	convert $(IMAGE).ppm $(IMAGE).jpg
-	rm ./$(IMAGE).ppm
-	$(OPEN) $(IMAGE).jpg
+	$(TARGET) $(IMAGE) --chip --color
+	$(OPEN) $(IMAGE).ppm
 
 clear:
 	rm -f *.basic_canvas
 
 clean:
 	rm -f *.output *.o *.gch
+
+redo: clean
 	cd include/canvas/; make clean
 	cd include/spline/; make clean
+	make chips
