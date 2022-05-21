@@ -1,6 +1,9 @@
 #ifndef CANVAS_INCLUDE_H
 #define CANVAS_INCLUDE_H
 
+#include "include/canvas/color.hpp"
+#include "include/canvas/Vector.hpp"
+
 colorint WHITE[COLOR_LEN];
 colorint BLUE[COLOR_LEN];
 colorint CYAN[COLOR_LEN];
@@ -20,10 +23,14 @@ void colors_init(){
 	make_color(TRANSPARENT, 0, 0, 0, 0);
 }
 
-void std_line(Vector a, Vector b){
-	BC->line(a, b);
+template <typename CanvasT>
+void std_line(CanvasT* C, Vector a, Vector b){
+	C->line(a, b);
 }
-void (*_line)(Vector a, Vector b){ std_line };
+template <typename CanvasT>
+void _line(CanvasT* C, Vector a, Vector b){
+	C->line(a, b);
+}
 template <typename CanvasT>
 void _cross(CanvasT* C, Vector a, float size = .03){
 	C->line(
@@ -35,9 +42,6 @@ void _cross(CanvasT* C, Vector a, float size = .03){
 		a + Vector(+size, -size)
 	);
 }
-void _cross(Vector a, float size = .03){
-	_cross(BC, a, size);
-}
 template <typename CanvasT>
 void _plus(CanvasT* C, Vector a, float size = .03){
 	C->line(
@@ -48,9 +52,6 @@ void _plus(CanvasT* C, Vector a, float size = .03){
 		a + Vector(0, -size),
 		a + Vector(0, +size)
 	);
-}
-void _plus(Vector a, float size = .03){
-	_plus(BC, a, size);
 }
 
 
