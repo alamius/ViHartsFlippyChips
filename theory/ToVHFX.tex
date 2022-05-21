@@ -1,43 +1,43 @@
 \documentclass[10pt]{article}
-    \usepackage[top=2cm,bottom=3cm,left=2cm,right=2cm]{geometry}
+	\usepackage[top=2cm,bottom=3cm,left=2cm,right=2cm]{geometry}
 
-    % amsmath and amssymb packages, useful for mathematical formulas and symbols
-    \usepackage{amsmath,amssymb}
+	% amsmath and amssymb packages, useful for mathematical formulas and symbols
+	\usepackage{amsmath,amssymb}
 
-    % Use Unicode characters when possible
-    \usepackage[utf8]{inputenc}
+	% Use Unicode characters when possible
+	\usepackage[utf8]{inputenc}
 
-    % textcomp package and marvosym package for additional characters
-    \usepackage{textcomp,marvosym}
+	% textcomp package and marvosym package for additional characters
+	\usepackage{textcomp,marvosym}
 
-    % cite package, to clean up citations in the main text. Do not remove.
-    \usepackage{cite}
+	% cite package, to clean up citations in the main text. Do not remove.
+	\usepackage{cite}
 
-    % Use nameref to cite supporting information files (see Supporting Information section for more info)
-    \usepackage{nameref,hyperref}
+	% Use nameref to cite supporting information files (see Supporting Information section for more info)
+	\usepackage{nameref,hyperref}
 
-    % line numbers
-    \usepackage[right]{lineno}
+	% line numbers
+	\usepackage[right]{lineno}
 
-    % ligatures disabled
-    \usepackage{microtype}
-    \DisableLigatures[f]{encoding = *, family = * }
+	% ligatures disabled
+	\usepackage{microtype}
+	\DisableLigatures[f]{encoding = *, family = * }
 
-    % color can be used to apply background shading to table cells only
-    \usepackage[table]{xcolor}
+	% color can be used to apply background shading to table cells only
+	\usepackage[table]{xcolor}
 
-    % array package and thick rules for tables
-    \usepackage{array}
+	% array package and thick rules for tables
+	\usepackage{array}
 
-    \usepackage{tikz}
-    \usetikzlibrary{calc}
+	\usepackage{tikz}
+	\usetikzlibrary{calc}
 
 \newcommand\samplesTikz{10}
 \def\Spline#1#2#3#4#5#6#7#8{%Px Py Qx Qy px py qx qy
-    plot (
-        {   (#1) + (#5)*(\t) + (3*(#3) - 3*(#1) - 2*(#5) - (#7))*(\t)*(\t) + (2*(#1) - 2*(#3) + (#5) + (#7))*(\t)*(\t)*(\t)   },
-        {   (#2) + (#6)*(\t) + (3*(#4) - 3*(#2) - 2*(#6) - (#8))*(\t)*(\t) + (2*(#2) - 2*(#4) + (#6) + (#8))*(\t)*(\t)*(\t)   }
-    )
+	plot (
+		{   (#1) + (#5)*(\t) + (3*(#3) - 3*(#1) - 2*(#5) - (#7))*(\t)*(\t) + (2*(#1) - 2*(#3) + (#5) + (#7))*(\t)*(\t)*(\t)   },
+		{   (#2) + (#6)*(\t) + (3*(#4) - 3*(#2) - 2*(#6) - (#8))*(\t)*(\t) + (2*(#2) - 2*(#4) + (#6) + (#8))*(\t)*(\t)*(\t)   }
+	)
 }
 % \def\ESpline#1#2#3#4#5#6#7#8{%Px Py Qx Qy px py qx qy
 %     plot (
@@ -65,80 +65,80 @@
 \maketitle
 
 \begin{figure}[h]
-    \begin{tikzpicture}[scale=8]
-        \node[inner sep=0pt, outer sep=0pt] (A) at (0.4, 0.8) {};
-        \node[inner sep=0pt, outer sep=0pt] (B) at (0.1, 1) {};
-        \node[inner sep=0pt, outer sep=0pt] (C) at (0.4, 0.2) {};
-        \node[inner sep=0pt, outer sep=0pt] (D) at (0.7, 1) {};
-        \node[inner sep=0pt, outer sep=0pt] (E) at (0.7, 0.2) {};
-        \draw (A) node[above]      {$A$} .. controls +({-1 *\controlfactor}, {0  *\controlfactor}) and +({-0.5*\controlfactor}, {-0.5*\controlfactor}) .. (B);
-        \draw[-latex] (A) -- +({-1 *\controlfactor*.7}, {0  *\controlfactor*.7});
-        \draw (B) node[above left] {$B$} .. controls +({0.5*\controlfactor}, {0.5*\controlfactor}) and +({-1  *\controlfactor}, {-0  *\controlfactor}) .. (C);
-        \draw[-latex] (B) -- +({0.5*\controlfactor*.7}, {0.5*\controlfactor*.7});
-        \draw (C) node[below]      {$C$} .. controls +({ 1 *\controlfactor}, {0  *\controlfactor}) and +({ 1  *\controlfactor}, {-0  *\controlfactor}) .. (D);
-        \draw[-latex] (C) -- +({ 1 *\controlfactor*.7}, {0  *\controlfactor*.7});
-        \draw (D) node[above]      {$D$} .. controls +({-1 *\controlfactor}, {0  *\controlfactor}) and +({-1  *\controlfactor}, {-0  *\controlfactor}) .. (E);
-        \draw[-latex] (D) -- +({-1 *\controlfactor*.7}, {0  *\controlfactor*.7});
-        \draw (E) node[below]      {$E$} .. controls +({ 1 *\controlfactor}, {0  *\controlfactor}) and +({ 1  *\controlfactor}, {-0  *\controlfactor}) .. (A);
-        \draw[-latex] (E) -- +({ 1 *\controlfactor*.7}, {0  *\controlfactor*.7});
-    \end{tikzpicture}
-    \includegraphics[scale=.13]{chip}
-    % \caption{}
-    \label{}
+	\begin{tikzpicture}[scale=8]
+		\node[inner sep=0pt, outer sep=0pt] (A) at (0.4, 0.8) {};
+		\node[inner sep=0pt, outer sep=0pt] (B) at (0.1, 1) {};
+		\node[inner sep=0pt, outer sep=0pt] (C) at (0.4, 0.2) {};
+		\node[inner sep=0pt, outer sep=0pt] (D) at (0.7, 1) {};
+		\node[inner sep=0pt, outer sep=0pt] (E) at (0.7, 0.2) {};
+		\draw (A) node[above]      {$A$} .. controls +({-1 *\controlfactor}, {0  *\controlfactor}) and +({-0.5*\controlfactor}, {-0.5*\controlfactor}) .. (B);
+		\draw[-latex] (A) -- +({-1 *\controlfactor*.7}, {0  *\controlfactor*.7});
+		\draw (B) node[above left] {$B$} .. controls +({0.5*\controlfactor}, {0.5*\controlfactor}) and +({-1  *\controlfactor}, {-0  *\controlfactor}) .. (C);
+		\draw[-latex] (B) -- +({0.5*\controlfactor*.7}, {0.5*\controlfactor*.7});
+		\draw (C) node[below]      {$C$} .. controls +({ 1 *\controlfactor}, {0  *\controlfactor}) and +({ 1  *\controlfactor}, {-0  *\controlfactor}) .. (D);
+		\draw[-latex] (C) -- +({ 1 *\controlfactor*.7}, {0  *\controlfactor*.7});
+		\draw (D) node[above]      {$D$} .. controls +({-1 *\controlfactor}, {0  *\controlfactor}) and +({-1  *\controlfactor}, {-0  *\controlfactor}) .. (E);
+		\draw[-latex] (D) -- +({-1 *\controlfactor*.7}, {0  *\controlfactor*.7});
+		\draw (E) node[below]      {$E$} .. controls +({ 1 *\controlfactor}, {0  *\controlfactor}) and +({ 1  *\controlfactor}, {-0  *\controlfactor}) .. (A);
+		\draw[-latex] (E) -- +({ 1 *\controlfactor*.7}, {0  *\controlfactor*.7});
+	\end{tikzpicture}
+	\includegraphics[scale=.13]{chip}
+	% \caption{}
+	\label{}
 \end{figure}
 \newpage
 
 \section{Overview}
 \paragraph{Goal}
-    The Goal is to write a Program that can generate Images with a Coloring that has a nice 3D-flipping Look from a closed Line as drawn by YouTuber and Mathematician Vi Hart. I'll call the result a 'Chip'.
+	The Goal is to write a Program that can generate Images with a Coloring that has a nice 3D-flipping Look from a closed Line as drawn by YouTuber and Mathematician Vi Hart. I'll call the result a 'Chip'.
 \paragraph{Challenges}
-    To achieve that, a few mathematical and computational Challenges need to be overcome, those are mainly:
-    \begin{itemize}
-        \item Finding the Intersections of the Line
-        \item Generating the Graph of the Chip
-        \item Defining the value of the Chip in the Faces
-    \end{itemize}
+	To achieve that, a few mathematical and computational Challenges need to be overcome, those are mainly:
+	\begin{itemize}
+		\item Finding the Intersections of the Line
+		\item Generating the Graph of the Chip
+		\item Defining the value of the Chip in the Faces
+	\end{itemize}
 \paragraph{Behind the \#Includes}
-    A lot has to be done behind the Curtains of a few {\tt \#include} statements.
-    In the Area of simple and composed Splines:
-    \begin{itemize}
-        \item Defining and Implementing Splines
-        \item Finding Intersections of a Spline with another and with itself
-        \item Finding Intersections of a Spline with a straight Line
-        \item Getting a part of a Spline as a new Spline
-        \item Implementing almost all of these for Spline Constructs (several Splines) too
-        \item Approximating Spline Constructs with one single Spline
-    \end{itemize}
-    And for actually Creating, Composing and Manipulating the resulting Images in a memory-efficient way:
-    \begin{itemize}
-        \item Defining Canvas Classes
-        \item $\alpha$-Channels and Layered Canvasses
-        \item Drawing Basic Shapes (when Lines are the hardest thing)
-        \item Filtering (smooooth Gauss!)
-    \end{itemize}
+	A lot has to be done behind the Curtains of a few {\tt \#include} statements.
+	In the Area of simple and composed Splines:
+	\begin{itemize}
+		\item Defining and Implementing Splines
+		\item Finding Intersections of a Spline with another and with itself
+		\item Finding Intersections of a Spline with a straight Line
+		\item Getting a part of a Spline as a new Spline
+		\item Implementing almost all of these for Spline Constructs (several Splines) too
+		\item Approximating Spline Constructs with one single Spline
+	\end{itemize}
+	And for actually Creating, Composing and Manipulating the resulting Images in a memory-efficient way:
+	\begin{itemize}
+		\item Defining Canvas Classes
+		\item $\alpha$-Channels and Layered Canvasses
+		\item Drawing Basic Shapes (when Lines are the hardest thing)
+		\item Filtering (smooooth Gauss!)
+	\end{itemize}
 \paragraph{Outlook}
-    The Project has resulted in a Prototype, not a full and final Program, many things are glued together behind the scenes and would fall apart on other Examples of a Chip.
+	The Project has resulted in a Prototype, not a full and final Program, many things are glued together behind the scenes and would fall apart on other Examples of a Chip.
 \section{Splines}
-    \input{splines_basic.tex}
-    \if\behindIncludes1
-        \input{splines.tex}
-    \fi
+	\input{splines_basic.tex}
+	\if\behindIncludes1
+		\input{splines.tex}
+	\fi
 \input{graph.tex}
 \input{net.tex}
 \input{value.tex}
 \section{Outlook}
 \paragraph{Generalization}
-    There are a lot of details still not fully generalized:
-    \begin{itemize}
-        \item The Outer Face is detected with a diagonal, but that could also miss the Chip completely.
-        \item The Coloring only uses regular Splines, but usually the Edges are composed of at least two Splines, so there will be only an Approximation and for many cases of Lines, that would look terrible. To see this happen, you can look at the little ear in the top left corner of my First Page.
-        \item With more than three Edges to a Face, it could easily happen that the innermost Area is not covered by any Net and therefore stays opaque, though it could just be white. That {\bf would} be awkward.
-    \end{itemize}
+	There are a lot of details still not fully generalized:
+	\begin{itemize}
+		\item The Outer Face is detected with a diagonal, but that could also miss the Chip completely.
+		\item The Coloring only uses regular Splines, but usually the Edges are composed of at least two Splines, so there will be only an Approximation and for many cases of Lines, that would look terrible. To see this happen, you can look at the little ear in the top left corner of my First Page.
+		\item With more than three Edges to a Face, it could easily happen that the innermost Area is not covered by any Net and therefore stays opaque, though it could just be white. That {\bf would} be awkward.
+	\end{itemize}
 \paragraph{Optimization}
-    The next Challenge will be to make the algorithm more effient, especially when redrawing a Chip with a slightly changed Point.
-    The Canvas Classes could probably also take some help from CUDA to become more time efficient – though I already made them as memory efficient as neccessary for large images on my machine. \newline
+	The next Challenge will be to make the algorithm more effient, especially when redrawing a Chip with a slightly changed Point.
+	The Canvas Classes could probably also take some help from CUDA to become more time efficient – though I already made them as memory efficient as neccessary for large images on my machine. \newline
 \paragraph{Interactivity}
-    Also, although there are some pieces of old code in {\tt test.cpp} that use the mouse, these are made for the annoyingly buggy {\tt graphics.h} which always took my {\tt X} with it when it crashed – sometimes also, when the program just terminated normally – so there is no Interactivity at all currently, even not using the commandline, the Points for the Line are just coded in. And I couldn't learn OpenGL in the last 5 weeks...
+	Also, although there are some pieces of old code in {\tt test.cpp} that use the mouse, these are made for the annoyingly buggy {\tt graphics.h} which always took my {\tt X} with it when it crashed – sometimes also, when the program just terminated normally – so there is no Interactivity at all currently, even not using the commandline, the Points for the Line are just coded in. And I couldn't learn OpenGL in the last 5 weeks...
 % \newpage
 % \if\behindIncludes1\input{spline_intersection_linear.tex}\fi
 \end{document}

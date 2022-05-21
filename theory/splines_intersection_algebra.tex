@@ -58,12 +58,12 @@
 % \end{figure}
 given:
 $$\begin{aligned}
-    \Lspline_1(t) = \Lspline_{PQpq}(t) =& P + pt + T_1t^2 + U_1t^3 & \hspace{1cm}
-    \Lspline_2(u) = \Lspline_{RSrs}(u) =& R + ru + T_2u^2 + U_2u^3 \\
-    T_1 :=& (3Q-3P-2p-q) & \hspace{1cm}
-    T_2 :=& (3S-3R-2r-s) \\
-    U_1 :=& (2P-2Q+p+q)  & \hspace{1cm}
-    U_2 :=& (2R-2S+r+s) \\
+	\Lspline_1(t) = \Lspline_{PQpq}(t) =& P + pt + T_1t^2 + U_1t^3 & \hspace{1cm}
+	\Lspline_2(u) = \Lspline_{RSrs}(u) =& R + ru + T_2u^2 + U_2u^3 \\
+	T_1 :=& (3Q-3P-2p-q) & \hspace{1cm}
+	T_2 :=& (3S-3R-2r-s) \\
+	U_1 :=& (2P-2Q+p+q)  & \hspace{1cm}
+	U_2 :=& (2R-2S+r+s) \\
 \end{aligned}$$
 % separate into coordinates:
 $$\begin{aligned}
@@ -76,8 +76,8 @@ $$\begin{aligned}
 % $$\begin{aligned}
 %     \frac{U_{1y}}{U_{1x}}\left(P_x + p_xt + T_{1x}t^2 + U_{1x}t^3\right) =& \frac{U_{1y}}{U_{1x}}\Lspline_2(u)_x & \hspace{1cm}
 %     \frac{U_{2y}}{U_{2x}}\left(R_x + r_xu + T_{2x}u^2 + U_{2x}u^3\right) =& \frac{U_{2y}}{U_{2x}}\Lspline_1(t)_x \\
-    w_{1y} :=& \frac{U_{1y}}{U_{1x}} & \hspace{1cm}
-    w_{2y} :=& \frac{U_{2y}}{U_{2x}} \\
+	w_{1y} :=& \frac{U_{1y}}{U_{1x}} & \hspace{1cm}
+	w_{2y} :=& \frac{U_{2y}}{U_{2x}} \\
 % \end{aligned}$$
 % restructure:
 % $$\begin{aligned}
@@ -87,10 +87,10 @@ $$\begin{aligned}
 %     (w_{2y}r_x - r_y)u + & \\
 %     (w_{1y}T_{1x} - T_{1y})t^2 =& w_{1y}\Lspline_2(u)_x & \hspace{1cm}
 %     (w_{2y}T_{2x} - T_{2y})u^2 =& w_{2y}\Lspline_1(t)_x \\
-    V_{10} :=& \frac{ w_{1y}P_x - P_y }{ w_{1y}T_{1x} - T_{1y} } & \hspace{1cm}
-    V_{20} :=& \frac{ w_{2y}R_x - R_y }{ w_{2y}T_{2x} - T_{2y} } \\
-    V_{11} :=& \frac{ w_{1y}p_x - p_y }{ w_{1y}T_{1x} - T_{1y} } & \hspace{1cm}
-    V_{21} :=& \frac{ w_{2y}r_x - r_y }{ w_{2y}T_{2x} - T_{2y} } \\
+	V_{10} :=& \frac{ w_{1y}P_x - P_y }{ w_{1y}T_{1x} - T_{1y} } & \hspace{1cm}
+	V_{20} :=& \frac{ w_{2y}R_x - R_y }{ w_{2y}T_{2x} - T_{2y} } \\
+	V_{11} :=& \frac{ w_{1y}p_x - p_y }{ w_{1y}T_{1x} - T_{1y} } & \hspace{1cm}
+	V_{21} :=& \frac{ w_{2y}r_x - r_y }{ w_{2y}T_{2x} - T_{2y} } \\
 % \end{aligned}$$
 % quadratic:
 % $$\begin{aligned}
@@ -98,18 +98,18 @@ $$\begin{aligned}
 %     w_{2y}\Lspline_1(t)_x =& V_{20} + V_{21}u + u^2 \\
 %     0 =& t^2 + tV_{11} + V_{10} - W_{12}\Lspline_2(u)_x & \hspace{1cm}
 %     0 =& u^2 + uV_{21} + V_{20} - W_{22}\Lspline_1(t)_x \\
-    W_{10} :=& -\frac{V_{11}}{2} & \hspace{1cm}
-    W_{20} :=& -\frac{V_{21}}{2} \\
-    W_{11} :=& \left(\frac{V_{11}}{2}\right)^2 - V_{10} & \hspace{1cm}
-    W_{21} :=& \left(\frac{V_{21}}{2}\right)^2 - V_{20} \\
-    W_{12} :=& \frac{w_{1y}}{ w_{1y}T_{1x}-T_{1y} } & \hspace{1cm}
-    W_{22} :=& \frac{w_{2y}}{ w_{2y}T_{2x}-T_{2y} } \\
-    t =& W_{10} \pm \sqrt{
-        W_{11} + W_{12}\Lspline_2(u)_x
-    } & \hspace{1cm}
-    u =& W_{20} \pm \sqrt{
-        W_{21} + W_{22}\Lspline_1(t)_x
-    } \\
+	W_{10} :=& -\frac{V_{11}}{2} & \hspace{1cm}
+	W_{20} :=& -\frac{V_{21}}{2} \\
+	W_{11} :=& \left(\frac{V_{11}}{2}\right)^2 - V_{10} & \hspace{1cm}
+	W_{21} :=& \left(\frac{V_{21}}{2}\right)^2 - V_{20} \\
+	W_{12} :=& \frac{w_{1y}}{ w_{1y}T_{1x}-T_{1y} } & \hspace{1cm}
+	W_{22} :=& \frac{w_{2y}}{ w_{2y}T_{2x}-T_{2y} } \\
+	t =& W_{10} \pm \sqrt{
+		W_{11} + W_{12}\Lspline_2(u)_x
+	} & \hspace{1cm}
+	u =& W_{20} \pm \sqrt{
+		W_{21} + W_{22}\Lspline_1(t)_x
+	} \\
 % \end{aligned}$$
 %     %     combine and die:
 %     %     $$\begin{aligned}

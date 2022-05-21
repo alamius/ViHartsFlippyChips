@@ -1,37 +1,37 @@
-    $$\begin{aligned}
-        \Lspline_{PQpq}(t) =& P + pt + (3Q-3P-2p-q)t^2 + (2P-2Q+p+q)t^3 \\
-        &\Rightarrow \diffrm\Lspline(0) = p,\phantom{--} \diffrm\Lspline(1) = q \\
-    \end{aligned}$$
-    The following abbreviation will be useful for readability purposes:
-    $$\begin{aligned}
-        T :=&\phantom{.} 3Q-3P-2p-q \\
-        U :=&\phantom{.} 2P-2Q+p+q \\
-        \Rightarrow \Lspline_{PQpq}(t) =&\phantom{.} P + pt + Tt^2 + U^3 \\
-    \end{aligned}$$
-    diff:
-    $$\begin{aligned}
-        \diffrm\Lspline_{PQpq}(t) = p + 2Tt + 3Ut^2 \\
-    \end{aligned}$$
-    subspline:
-    The Spline following $\Lspline$ from $t_1$ to $t_2$ can be defined as follows:
-    $$\begin{aligned}
-        P =&\phantom{.} \Lspline(t_1) & Q =&\phantom{.} \Lspline(t_2) \\
-        p =&\phantom{.} (t_2-t_1)\diffrm\Lspline(t_1) & q =&\phantom{.} (t_2-t_1)\diffrm\Lspline(t_2-t_1)(t_2)) \\
-    \end{aligned}$$
+	$$\begin{aligned}
+		\Lspline_{PQpq}(t) =& P + pt + (3Q-3P-2p-q)t^2 + (2P-2Q+p+q)t^3 \\
+		&\Rightarrow \diffrm\Lspline(0) = p,\phantom{--} \diffrm\Lspline(1) = q \\
+	\end{aligned}$$
+	The following abbreviation will be useful for readability purposes:
+	$$\begin{aligned}
+		T :=&\phantom{.} 3Q-3P-2p-q \\
+		U :=&\phantom{.} 2P-2Q+p+q \\
+		\Rightarrow \Lspline_{PQpq}(t) =&\phantom{.} P + pt + Tt^2 + U^3 \\
+	\end{aligned}$$
+	diff:
+	$$\begin{aligned}
+		\diffrm\Lspline_{PQpq}(t) = p + 2Tt + 3Ut^2 \\
+	\end{aligned}$$
+	subspline:
+	The Spline following $\Lspline$ from $t_1$ to $t_2$ can be defined as follows:
+	$$\begin{aligned}
+		P =&\phantom{.} \Lspline(t_1) & Q =&\phantom{.} \Lspline(t_2) \\
+		p =&\phantom{.} (t_2-t_1)\diffrm\Lspline(t_1) & q =&\phantom{.} (t_2-t_1)\diffrm\Lspline(t_2-t_1)(t_2)) \\
+	\end{aligned}$$
 \subsection{Intersection of Splines}
-    % \input{splines_intersection_algebra.tex}
-    Finding out, that a Solution for the Intersection $\Lspline_1(t) = \Lspline_2(u)$ is increadibly difficult and generally impossible to find analyically, took a long time and a lot of lines of \LaTeX... When I realized that I could not do it, I went with the unclean, imprecise and much less satisfying approach of putting hairbands on the Splines everywhere and then letting them slowly wiggle together.
-    What I'm talking about is Gradient Descent, with a number of Parameters $t$ along Spline $A$ and the same number of Parameters $u$ along $B$. Every possible Pair of Parameters $(t, u)$ is slowly changed to reduce the Distance of the Points $A(t), B(u)$ according to a very simple Approximation of the Gradient:
-    $$\begin{aligned}
-        \diff{}t =& \frac{\alpha}{2\varepsilon} \left(\left|A(t-\varepsilon) - B(u)\right| - \left|A(t+\varepsilon) - B(u)\right|\right)\\
-        \diff{}u =& \frac{\alpha}{2\varepsilon} \left(\left|A(t) - B(u-\varepsilon)\right| - \left|A(t) - B(u+\varepsilon)\right|\right) \\
-    \end{aligned}$$
-    Here, $\alpha$ is the speed of the Approximation, and there must be a hundred ways to make the Convergence more efficient by changin it over time or a lot of other things. Additional measures that are used in the Algorithm:
-    \begin{itemize}
-        \item Accepting Pairs, where the Distance of the Points is less than {\tt done\_crit} (Default: 0.005), as Solutions and removing them from the active pool
-        \item Removing Pairs, where $t$ or $u$ are outside the Spline's Definition $[0, 1]$
-        \item Removing Pairs that are almost the same as an accepted Solution $(t_2, u_2)$: $|A(t) - A(t_2)| < $\phantom{.}{\tt same\_crit} and $|B(u) - B(u_2)| < $\phantom{.}{\tt same\_crit} (Default: {\tt same\_crit} = 0.02)
-        \item Removing Pairs that are not changing anymore ($|\diff{}t|, |\diff{}u| < $\phantom{.}{\tt fixed\_crit}, Default: {\tt fixed\_crit} = 0.0001)
-        \item In Self-Intersection: $A = B$, so $t = u$ is useless and gets removed ($|t - u| < $\phantom{.}{\tt identical\_crit}, Default: 0.05)
-    \end{itemize}
-    Another measure is rather practical: Two Splines that are subsequent – or: Neighbors – in the Line, will always have the Intersection where they join. That Solution is of no value for the actual pupose and is therefore removed, if the corresponding Parameter {\tt neighbors = true} is passed. Self-Intersection calls also have to be marked in a similar way, with {\tt identical = true}.
+	% \input{splines_intersection_algebra.tex}
+	Finding out, that a Solution for the Intersection $\Lspline_1(t) = \Lspline_2(u)$ is increadibly difficult and generally impossible to find analyically, took a long time and a lot of lines of \LaTeX... When I realized that I could not do it, I went with the unclean, imprecise and much less satisfying approach of putting hairbands on the Splines everywhere and then letting them slowly wiggle together.
+	What I'm talking about is Gradient Descent, with a number of Parameters $t$ along Spline $A$ and the same number of Parameters $u$ along $B$. Every possible Pair of Parameters $(t, u)$ is slowly changed to reduce the Distance of the Points $A(t), B(u)$ according to a very simple Approximation of the Gradient:
+	$$\begin{aligned}
+		\diff{}t =& \frac{\alpha}{2\varepsilon} \left(\left|A(t-\varepsilon) - B(u)\right| - \left|A(t+\varepsilon) - B(u)\right|\right)\\
+		\diff{}u =& \frac{\alpha}{2\varepsilon} \left(\left|A(t) - B(u-\varepsilon)\right| - \left|A(t) - B(u+\varepsilon)\right|\right) \\
+	\end{aligned}$$
+	Here, $\alpha$ is the speed of the Approximation, and there must be a hundred ways to make the Convergence more efficient by changin it over time or a lot of other things. Additional measures that are used in the Algorithm:
+	\begin{itemize}
+		\item Accepting Pairs, where the Distance of the Points is less than {\tt done\_crit} (Default: 0.005), as Solutions and removing them from the active pool
+		\item Removing Pairs, where $t$ or $u$ are outside the Spline's Definition $[0, 1]$
+		\item Removing Pairs that are almost the same as an accepted Solution $(t_2, u_2)$: $|A(t) - A(t_2)| < $\phantom{.}{\tt same\_crit} and $|B(u) - B(u_2)| < $\phantom{.}{\tt same\_crit} (Default: {\tt same\_crit} = 0.02)
+		\item Removing Pairs that are not changing anymore ($|\diff{}t|, |\diff{}u| < $\phantom{.}{\tt fixed\_crit}, Default: {\tt fixed\_crit} = 0.0001)
+		\item In Self-Intersection: $A = B$, so $t = u$ is useless and gets removed ($|t - u| < $\phantom{.}{\tt identical\_crit}, Default: 0.05)
+	\end{itemize}
+	Another measure is rather practical: Two Splines that are subsequent – or: Neighbors – in the Line, will always have the Intersection where they join. That Solution is of no value for the actual pupose and is therefore removed, if the corresponding Parameter {\tt neighbors = true} is passed. Self-Intersection calls also have to be marked in a similar way, with {\tt identical = true}.
