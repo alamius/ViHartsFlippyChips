@@ -1,8 +1,31 @@
 #ifndef CHIPS_TESTS_CPP
 #define CHIPS_TESTS_CPP
 
+#include <vector>
+#include <string>
+#include "include/canvas/LayeredCanvas.hpp"
+#include "canvas.include.hpp"
+#include "include/spline/SplineConstruct.hpp"
+#include "include/utils.random.h"
+#include "Chip.hpp"
+
+int dbg_file_lvl = 0;
+int width = 2000;
+int height = 1600;
+BasicCanvas* BC;
+LayeredCanvas* LC;
+bool drawing = true;
+std::string filename = "image";
+
+
+#if COLOR_LEN == 4
+	colorint (*write_bg_color)[COLOR_LEN] = &DARKGREEN;
+#else
+	colorint (*write_bg_color)[COLOR_LEN] = &TRANSPARENT;
+#endif
+
 void test_snake(){
-	BC = new BasicCanvas();
+	BC = new BasicCanvas(width, height);
 	Spline A = Spline(Point(Vector(.2, .2), Vector(0.5, 2)), Point(Vector(.8, .8), Vector(.5, 2)));
 	float step = .01;
 	float dt = .5;
@@ -18,7 +41,7 @@ void test_snake(){
 	delete BC;
 }
 void test_Splines(){
-	BC = new BasicCanvas();
+	BC = new BasicCanvas(width, height);
 	Spline A = Spline(Point(Vector(.3, .3), Vector(0, 2)), Point(Vector(.7, .3), Vector(0, -2)));
 	std::cout << "A:" << A.dbg() << '\n';
 	if(drawing) A.draw(BC);
@@ -66,7 +89,7 @@ void test_Splines(){
 	std::cout << "test_Splines finished" << '\n';
 }
 void test_SplineConstructs(){
-	BC = new BasicCanvas();
+	BC = new BasicCanvas(width, height);
 	Spline A = Spline(Point(Vector(.5, .6), Vector(-.1, .5)), Point(Vector(.25, .5), Vector( 0, -.5)));
 	Spline B = Spline(Point(Vector(.25, .5), Vector( 0, -.5)), Point(Vector(.5, .1), Vector( .1, -.5)));
 	SplineConstruct S = SplineConstruct({A, B}, {1, 2});
@@ -107,7 +130,7 @@ void test_SplineConstructs(){
 	std::cout << "test_SplineConstructs finished" << '\n';
 }
 void test_SplineConstruct_approximate(){
-	BC = new BasicCanvas();
+	BC = new BasicCanvas(width, height);
 	Spline A = Spline(Point(Vector(.5, .6), Vector(-.1, .5)), Point(Vector(.25, .5), Vector( 0, -.5)));
 	Spline B = Spline(Point(Vector(.25, .5), Vector( 0, -.5)), Point(Vector(.5, .1), Vector( .1, -.5)));
 	SplineConstruct S = SplineConstruct({A, B}, {1, 2});
@@ -133,7 +156,7 @@ void test_SplineConstruct_approximate(){
 	std::cout << "test_SplineConstruct_approximate finished" << '\n';
 }
 void test_basic_canvas(){ //this will not look proper, the requested behavior is only functional in LayeredCanvas
-	BC = new BasicCanvas();
+	BC = new BasicCanvas(width, height);
 	Vector a = Vector(.2, .2);
 	Vector b = Vector(.5, .1);
 	Vector c = Vector(.3, .9);
@@ -147,7 +170,7 @@ void test_basic_canvas(){ //this will not look proper, the requested behavior is
 	std::cout << "test_basic_canvas finished" << '\n';
 }
 void test_BC_LC(){
-	LC = new LayeredCanvas();
+	LC = new LayeredCanvas(width, height);
 	Vector a = Vector(.2, .2);
 	Vector b = Vector(.5, .1);
 	Vector c = Vector(.3, .9);
@@ -181,7 +204,7 @@ void test_BC_LC(){
 	LC->dump("test0");
 	LC->write("test_BC_LC_1");
 	delete LC;
-	BC = new BasicCanvas();
+	BC = new BasicCanvas(width, height);
 	// BC->load("test");
 	// BC->dump("test1");
 	// BC->write("test_BC_LC_2");
@@ -234,7 +257,12 @@ void test_knot_1(bool print = false){
 	// chip.make_edges();
 	// chip.make_faces();
 	// std::cout << "chip:\n" << chip.dbg() << '\n';
-	chip.color(50*WIDTH/2000, 50*WIDTH/2000);
+	chip.color(
+		50*width/2000,
+		50*width/2000,
+		&std_color_func,
+		false
+	);
 	// chip.draw_net(5, 5, 0, -1, false, true);
 	// BC->setcolor(BLUE);
 	// chip.draw(BC);
@@ -248,7 +276,7 @@ void test_intersect_linear(){
 	Point E = Point(Vector(.75, .1), Vector( 1, 0));
 
 	Chip chip = Chip({A, B, C, D, E});
-	BC = new BasicCanvas();
+	BC = new BasicCanvas(width, height);
 	if(drawing){
 		// chip.draw(BC);
 		chip.mark_points(BC);
@@ -261,11 +289,11 @@ void test_intersect_linear(){
 	//     if(drawing) _cross(result[i].value);
 	//     std::cout << "  intersection " << i << ": " << result[i].value.to_str() << '\n';
 	// }
-	std::vector<Vector> intersections = chip.intersect_linear();
+	std::vector<Vector> intersections = chip.intersect_linear(Vector(0, 0), Vector(1, 1));
 	std::cout << "intersections: " << '\n';
 	BC->setcolor(GREEN);
 	for(int i = 0; i < intersections.size(); i++){
-		if(drawing) _cross(intersections[i]);
+		if(drawing) _cross(BC, intersections[i]);
 		std::cout << "  intersection " << i << ": " << intersections[i] << '\n';
 	}
 	BC->dump("test_intersect_linear");
@@ -281,7 +309,7 @@ void test_ABCD(int t_prec = 5, int v_prec = 5){
 	Chip chip = Chip(std::vector<Point>({A, B, C, D}));
 	if(drawing) chip.draw(BC);
 	chip.intersect();
-	chip.make_edges();
+	chip.make_edges(true);
 	// return;
 	chip.make_faces();
 	std::cout << "chip:\n" << chip.dbg() << '\n';
@@ -304,7 +332,7 @@ void test_knot_2(){
 		chip.mark_points(BC);
 	}
 	chip.intersect();
-	chip.make_edges();
+	chip.make_edges(true);
 	chip.make_faces();
 	chip.draw_net(BC);
 	std::cout << "chip:\n" << chip.dbg() << '\n';
@@ -317,7 +345,12 @@ void test_double_chip(){
 		Point(Vector(.9, .5), Vector( 0, -1.8)),
 		Point(Vector(.5, .8), Vector(-.3,  0 ))
 	});
-	chip.color();
+	chip.color(
+		50*width/2000,
+		50*width/2000,
+		&std_color_func,
+		false
+	);
 }
 void test_P(){
 	SplineConstruct O = SplineConstruct({
@@ -380,8 +413,8 @@ void test_random(int n=5){
 		if(drawing){
 			filename += "_";
 			chip.color(
-				50 * WIDTH/2000,
-				50 * WIDTH/2000,
+				50 * width/2000,
+				50 * width/2000,
 				&std_color_func, //color_func
 				false //apply_gauss);
 			);
@@ -472,7 +505,7 @@ colorint* dbg_color_func(colorint result[COLOR_LEN], float t, float v){
 	return result;
 }
 void test_color_stripe(){
-	LC = new LayeredCanvas();
+	LC = new LayeredCanvas(width, height);
 	Chip* chip = new Chip(std::vector<Point>());
 	Vector P = Vector(.7, .2), p1 = Vector( 0,  1), p2 = Vector( 0, 0);
 	Vector Q = Vector(.9, .5), q1 = Vector( 1,  0), q2 = Vector( 0, 1);
@@ -488,6 +521,32 @@ void test_color_stripe(){
 	LC->write("test_color_stripe");
 	delete chip;
 	delete LC;
+}
+
+int main(int argc, char const *argv[]) {
+	colors_init();
+	make_kernel_gauss();
+	srand(time(NULL));
+
+	test_snake();
+	test_Splines();
+	test_SplineConstructs();
+	test_SplineConstruct_approximate();
+	test_basic_canvas();
+
+	test_BC_LC();
+	test_knot_1();
+	test_intersect_linear();
+	test_ABCD();
+	test_knot_2();
+	test_double_chip();
+	test_P();
+	test_create();
+	test_random();
+	test_PQR();
+	test_color_stripe();
+
+	return 0;
 }
 
 #endif /* end of include guard: CHIPS_TESTS_CPP */
