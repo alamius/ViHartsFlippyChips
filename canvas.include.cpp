@@ -54,5 +54,8 @@ void _plus(CanvasT* C, Vector a, float size = .03){
 	);
 }
 
+#include "include/canvas/BasicCanvas.hpp"
+template void _plus<BasicCanvas>(BasicCanvas*, Vector, float);
+template void _cross<BasicCanvas>(BasicCanvas* C, Vector a, float size = .03);
 
 #endif /* end of include guard: CANVAS_INCLUDE_H */

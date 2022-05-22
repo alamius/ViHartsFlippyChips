@@ -881,5 +881,7 @@ std::string Chip::dbg(std::string indent){
 }
 
 template void Chip::draw<BasicCanvas>(BasicCanvas*, int);
+template void Chip::draw_net<BasicCanvas>(BasicCanvas*, int, int, int, int, bool, bool, bool);
+template void Chip::mark_points<BasicCanvas>(BasicCanvas*);
 
 #endif /* end of include guard: CHIP_CPP */
