@@ -4,7 +4,6 @@
 #include "Chip.hpp"
 #include "canvas.include.hpp"
 #include "include/utils.string.h"
-#include "define.h"
 
 extern std::string filename;
 extern LayeredCanvas* LC;
@@ -620,7 +619,8 @@ void Chip::draw_net(
 	int face_from,
 	int face_to,
 	bool draw_E,
-	bool draw_F
+	bool draw_F,
+	bool drawing
 ){
 	if(C == NULL){
 		C = new BasicCanvas(width, height);

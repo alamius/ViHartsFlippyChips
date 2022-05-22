@@ -13,7 +13,6 @@
 
 #include "include/canvas/BasicCanvas.hpp"
 #include "include/canvas/LayeredCanvas.hpp"
-#include "define.h"
 BasicCanvas* BC;
 LayeredCanvas* LC;
 #include "canvas.include.hpp"

@@ -10,7 +10,6 @@
 #include "Edge.hpp"
 #include "Node.hpp"
 #include "Face.hpp"
-#include "define.h"
 
 colorint* std_color_func(colorint result[COLOR_LEN], float t, float v);
 colorint std_alpha_map(colorint alpha);
@@ -69,7 +68,8 @@ public:
 		int face_from = 0,
 		int face_to = -1, // -1 is turned into faces.size() - 1
 		bool draw_E = true,
-		bool draw_F = false
+		bool draw_F = false,
+		bool drawing = true
 	);
 	//marking the private Chip::points on Canvas C
 	template <typename CanvasT>
