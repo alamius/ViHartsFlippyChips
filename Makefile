@@ -36,10 +36,10 @@ test: test.o $(OBJECTS)
 	$(CC) $(CPPFLAGS) -o test test.o $(OBJECTS)
 
 run_test: test
-	./test
+	./test | grep -v "request for out-of-frame pixel"
 
 clear:
-	rm -f *.basic_canvas
+	rm -f *.ppm *.basic_canvas *.basic_canvas_dump
 
 clean:
 	rm -f *.output *.o *.gch
