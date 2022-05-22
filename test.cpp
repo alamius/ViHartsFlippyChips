@@ -15,7 +15,8 @@ int height = 1600;
 BasicCanvas* BC;
 LayeredCanvas* LC;
 bool drawing = true;
-std::string filename = "image";
+std::string folder = "tests/";
+std::string filename = folder + "image";
 
 
 #if COLOR_LEN == 4
@@ -37,7 +38,7 @@ void test_snake(){
 		B.transform(1, 0, 0, 1, 0, .1);
 		B.draw(BC);
 	}
-	BC->write("test_snake");
+	BC->write(folder + "snake");
 	delete BC;
 }
 void test_Splines(){
@@ -84,7 +85,7 @@ void test_Splines(){
 	if(drawing){
 		C.draw(BC);
 	}
-	BC->write("test_Splines");
+	BC->write(folder + "Splines");
 	delete BC;
 	std::cout << "test_Splines finished" << '\n';
 }
@@ -125,7 +126,7 @@ void test_SplineConstructs(){
 		b = S(t);
 		BC->line(T(t), T(t) + Vector(.02, 0));
 	}
-	BC->write("test_SplineConstructs");
+	BC->write(folder + "SplineConstructs");
 	delete BC;
 	std::cout << "test_SplineConstructs finished" << '\n';
 }
@@ -151,7 +152,7 @@ void test_SplineConstruct_approximate(){
 		AB1.draw(BC);
 		AB2.draw(BC);
 	}
-	BC->write("test_SplineConstruct_approximate");
+	BC->write(folder + "SplineConstruct_approximate");
 	delete BC;
 	std::cout << "test_SplineConstruct_approximate finished" << '\n';
 }
@@ -165,7 +166,7 @@ void test_basic_canvas(){ //this will not look proper, the requested behavior is
 	BC->line(a, b);
 	BC->setcolor(0, 255, 0, 255);
 	BC->line_variation(a+Vector(0, .1), b+Vector(0, .1));
-	BC->write("test_basic_canvas");
+	BC->write(folder + "basic_canvas");
 	delete BC;
 	std::cout << "test_basic_canvas finished" << '\n';
 }
@@ -200,19 +201,19 @@ void test_BC_LC(){
 	// LC->quadrilateral_unchecked(a, b, c, d);
 	// LC->setcolor(200, 0, 0, 127);
 	// LC->quadrilateral_unchecked(a*.5, b*.5, c*.5, d*.5);
-	LC->save("test");
-	LC->dump("test0");
-	LC->write("test_BC_LC_1");
+	LC->save(folder + "BC_LC_");
+	LC->dump(folder + "BC_LC_0");
+	LC->write(folder + "BC_LC_1");
 	delete LC;
 	BC = new BasicCanvas(width, height);
 	// BC->load("test");
 	// BC->dump("test1");
-	// BC->write("test_BC_LC_2");
+	// BC->write(folder + "BC_LC_2");
 	BC->background(0, 60, 0, 200);
-	BC->dump("test2");
-	BC->load("test");
-	BC->dump("test3");
-	BC->write("test_BC_LC_3");
+	BC->dump(folder + "BC_LC_2");
+	BC->load(folder + "BC_LC");
+	BC->dump(folder + "BC_LC_3");
+	BC->write(folder + "BC_LC_3");
 	delete BC;
 	std::cout << "test_BC_LC finished" << '\n';
 }
@@ -257,6 +258,7 @@ void test_knot_1(bool print = false){
 	// chip.make_edges();
 	// chip.make_faces();
 	// std::cout << "chip:\n" << chip.dbg() << '\n';
+	filename = folder + "knot_1";
 	chip.color(
 		50*width/2000,
 		50*width/2000,
@@ -296,8 +298,8 @@ void test_intersect_linear(){
 		if(drawing) _cross(BC, intersections[i]);
 		std::cout << "  intersection " << i << ": " << intersections[i] << '\n';
 	}
-	BC->dump("test_intersect_linear");
-	BC->write("test_intersect_linear");
+	BC->dump(folder + "intersect_linear");
+	BC->write(folder + "intersect_linear");
 	delete BC;
 	std::cout << "test_intersect_linear finished" << '\n';
 }
@@ -345,6 +347,7 @@ void test_double_chip(){
 		Point(Vector(.9, .5), Vector( 0, -1.8)),
 		Point(Vector(.5, .8), Vector(-.3,  0 ))
 	});
+	filename = folder + "double_chip";
 	chip.color(
 		50*width/2000,
 		50*width/2000,
@@ -400,10 +403,11 @@ void test_create(){
 	std::cout << "test_create finished" << '\n';
 	#endif
 }
-void test_random(int n=5){
+void test_random(int n = 5){
 	std::vector<Point> points;
 	Chip chip = Chip(points);
 	Vector A, a;
+	filename = folder + "random";
 	for(int c = 0; c < n; c++){
 		A = Vector(random_float(.2, .8), random_float(.2, .8));
 		a = Vector(random_float(-.5, .5), random_float(-.5, .5));
@@ -511,6 +515,7 @@ void test_color_stripe(){
 	Vector Q = Vector(.9, .5), q1 = Vector( 1,  0), q2 = Vector( 0, 1);
 	Vector R = Vector(.2, .5), r1 = Vector(-.3, 1), r2 = Vector( 0, 0);
 	Vector S = Vector(.5, .7), s1 = Vector( .3, 1), s2 = Vector(-1, 0);
+	filename = folder + "color_stripe";
 	chip->color_stripe(
 		LC, 10, 10, dbg_color_func,
 		P, p1, p2,
@@ -518,7 +523,7 @@ void test_color_stripe(){
 		R, r1, r2,
 		S, s1, s2
 	);
-	LC->write("test_color_stripe");
+	LC->write(folder + "color_stripe");
 	delete chip;
 	delete LC;
 }
