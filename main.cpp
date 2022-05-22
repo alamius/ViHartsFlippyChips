@@ -21,6 +21,8 @@ LayeredCanvas* LC;
 #include "include/spline/Spline.hpp"
 std::string filename;
 int dbg_file_lvl = 0;
+int width = 2000;
+int height = 1600;
 colorint (*write_bg_color)[COLOR_LEN];
 #include "Chip.hpp"
 // #include "test.cpp"
@@ -133,8 +135,8 @@ int main(int argc, char const *argv[]){
 					exit(1);
 				}
 				chip->color(
-					t_prec * WIDTH/2000,
-					50 * WIDTH/2000,
+					t_prec * width/2000,
+					50 * width/2000,
 					&std_color_func,
 					apply_gauss
 				);
@@ -143,7 +145,7 @@ int main(int argc, char const *argv[]){
 					std::cerr << argument_message(arg) << "called without Chip! create one with --chip* or --regular before this option." << '\n';
 					exit(1);
 				}
-				BC = new BasicCanvas();
+				BC = new BasicCanvas(width, height);
 				chip->draw(BC);
 				BC->write(filename+".draw");
 			}else if(is_key(arg, "gauss")){

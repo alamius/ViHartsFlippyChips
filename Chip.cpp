@@ -10,6 +10,7 @@ extern std::string filename;
 extern LayeredCanvas* LC;
 extern BasicCanvas* BC;
 extern colorint (*write_bg_color)[COLOR_LEN];
+extern int width, height;
 
 colorint* std_color_func(colorint result[COLOR_LEN], float t, float v){
 	make_color(
@@ -50,7 +51,7 @@ void Chip::color(
 	make_faces();
 
 	//the canvas LC is used several times to paint separate layers that are written to hard drive in between and then all loaded onto a BasicCanvas in the end
-	LC = new LayeredCanvas();
+	LC = new LayeredCanvas(width, height);
 	//there will be as many layers as the maximum number of edges one face has (because for every edge there is a corner and corners overlap and are therefore written to separate layers)
 	int max_edges = 0;
 	for(int f = 0; f < faces.size(); f++){
@@ -174,7 +175,7 @@ void Chip::color(
 	}
 	LC->save(filename+"_added", std_alpha_map);
 	delete LC;
-	BC = new BasicCanvas();
+	BC = new BasicCanvas(width, height);
 	BC->background(*write_bg_color);
 	BC->load(filename+"_added");
 	BC->write(filename);
@@ -622,7 +623,7 @@ void Chip::draw_net(
 	bool draw_F
 ){
 	if(C == NULL){
-		C = new BasicCanvas();
+		C = new BasicCanvas(width, height);
 	}
 	if(face_to == -1){
 		face_to = faces.size();
