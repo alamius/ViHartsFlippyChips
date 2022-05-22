@@ -12,8 +12,7 @@ GLUT=-lglut -lGL
 OPEN=xdg-open
 DEPENDS=*.hpp *.cpp
 OBJECTS= \
-	main.o Chip.o \
-	Edge.o Node.o Face.o \
+	Chip.o Edge.o Node.o Face.o \
 	canvas.include.o \
 	include/canvas/Vector.o \
 	include/canvas/color.o \
@@ -26,12 +25,18 @@ OBJECTS= \
 
 DETATCH=gnome-terminal --working-directory=$(DIR) --
 
-chips: $(DEPENDS) $(OBJECTS)
-	$(CC) -o chips $(OBJECTS)
+chips: $(DEPENDS) main.o $(OBJECTS)
+	$(CC) $(CPPFLAGS) -o chips main.o $(OBJECTS)
 
-test: chips
+run: chips
 	$(TARGET) $(IMAGE) --chip --color
 	$(OPEN) $(IMAGE).ppm
+
+test: test.o $(OBJECTS)
+	$(CC) $(CPPFLAGS) -o test test.o $(OBJECTS)
+
+run_test: test
+	./test
 
 clear:
 	rm -f *.basic_canvas
