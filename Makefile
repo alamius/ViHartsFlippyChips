@@ -48,3 +48,8 @@ redo: clean
 	cd include/canvas/; make clean
 	cd include/spline/; make clean
 	make chips
+
+all_bg: chips
+	./chips C_black --chip --black --color && convert C_black.ppm C_black.jpg
+	./chips C_green --chip --green --color && convert C_green.ppm C_green.jpg
+	./chips C_rainbow --chip --rainbow --color && convert C_rainbow.ppm C_rainbow.jpg
