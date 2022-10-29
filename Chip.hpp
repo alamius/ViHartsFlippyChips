@@ -33,6 +33,8 @@ public:
 		int v_prec,
 		colorint* (*color_func)(colorint result[COLOR_LEN], float t, float v),
 		bool apply_gauss
+		bool apply_gauss,
+		bool apply_gauss_after_bg
 	);
 	//colors a area defined by four Splines in t_prec*v_prec small quadrilaterals with color given by color_func(t, v)
 	template <typename CanvasT>

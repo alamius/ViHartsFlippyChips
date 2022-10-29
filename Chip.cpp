@@ -40,8 +40,9 @@ void Chip::color(
 	int t_prec = 30, //number of separate layers of quadrilaterals from the corner outwards
 	int v_prec = 30, //number of separate layers of quadrilaterals across one corner
 	colorint* (*color_func)(colorint result[COLOR_LEN], float t, float v) = &std_color_func, //tells the color for quadrilateral at (t, v)
-	bool apply_gauss = true //whether the resulting image should be passed through a gaussian filter
-){
+	bool apply_gauss = true, //whether the intermediary image should be passed through a gaussian filter
+	bool apply_gauss_after_bg = false //whether the resulting image should be passed through a gaussian filter
+) {
 	intersect();
 	//catching unintersecting Line (error is printed by intersect)
 	if(nodes.size() == 0) return;
@@ -177,6 +178,9 @@ void Chip::color(
 	BC = new BasicCanvas(width, height);
 	BC->background(*write_bg_color);
 	BC->load(filename+"_added");
+	if(apply_gauss_after_bg){
+		LC->filter(kernel_gauss, true);
+	}
 	BC->write(filename);
 	if(dbg_file_lvl >= 4) BC->dump(filename);
 	delete BC;
