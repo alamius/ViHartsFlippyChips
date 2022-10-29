@@ -221,15 +221,15 @@ void Chip::color_stripe(
 	const Vector& S, const Vector& s1, const Vector& s2
 ){
 	// P 1 ~~ Q 1
-	// 2      2
+	// 2      2    ↓ v ∈ [0, 1]
 	// |      |
 	// R 1 ~~ S 1
 	// 2      2
 	Spline* PR = new Spline(P, R, p2, r2);
 	Spline* QS = new Spline(Q, S, q2, s2);
-	float v;
-	float dv = 1.0f/v_prec;
-	float dt = 1.0f/t_prec;
+	float v; //the position of the spline stretched between PR and QS
+	float dv = 1.0f / v_prec;
+	float dt = 1.0f / t_prec;
 	Spline* F[v_prec+1];
 	F[0] = new Spline(P, Q, p1, q1);
 	colorint fillcolor[COLOR_LEN];
