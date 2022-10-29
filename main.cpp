@@ -29,11 +29,7 @@ colorint (*write_bg_color)[COLOR_LEN];
 
 int main(int argc, char const *argv[]){
 	colors_init();
-	#if COLOR_LEN == 4
-		write_bg_color = &DARKGREEN;
-	#else
-		write_bg_color = &TRANSPARENT;
-	#endif
+	write_bg_color = &TRANSPARENT;
 	make_kernel_gauss();
 	if(dbg_file_lvl >= 2){
 		std::cout << "size of BasicCanvas: " << sizeof(BasicCanvas)/1000 << "kB" << '\n';
@@ -147,6 +143,18 @@ int main(int argc, char const *argv[]){
 				BC = new BasicCanvas(width, height);
 				chip->draw(BC);
 				BC->write(filename+".draw");
+			}else if(is_key(arg, "transparent")){
+				std::cout << argument_message(arg) << "using transparent background." << '\n';
+				write_bg_color = &TRANSPARENT;
+			}else if(is_key(arg, "black")){
+				std::cout << argument_message(arg) << "using black background." << '\n';
+				write_bg_color = &BLACK;
+			}else if(is_key(arg, "green")){
+				std::cout << argument_message(arg) << "using darkgreen background." << '\n';
+				write_bg_color = &DARKGREEN;
+			}else if(is_key(arg, "rainbow")){
+				std::cout << argument_message(arg) << "using rainbow background." << '\n';
+				write_bg_color = NULL;
 			}else if(is_key(arg, "gauss")){
 				std::cout << argument_message(arg) << "using gauss." << '\n';
 				apply_gauss = true;
