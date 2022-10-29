@@ -31,8 +31,7 @@ public:
 	void color(
 		int t_prec,
 		int v_prec,
-		colorint* (*color_func)(colorint result[COLOR_LEN], float t, float v),
-		bool apply_gauss
+		colorint* (*color_func)(colorint result[COLOR_LEN], float t, float v), //with NULL, this creates a triangle rainbow background
 		bool apply_gauss,
 		bool apply_gauss_after_bg
 	);

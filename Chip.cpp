@@ -176,7 +176,31 @@ void Chip::color(
 	LC->save(filename+"_added", std_alpha_map);
 	delete LC;
 	BC = new BasicCanvas(width, height);
-	BC->background(*write_bg_color);
+
+	if (write_bg_color != NULL) {
+		BC->background(*write_bg_color);
+	} else {
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				int r = 0, g = 0, b = 0;
+
+				int h1 = height / 3;
+				int h2 = 2 * height / 3;
+				int h3 = height;
+
+				if		(y < h1)	r = (h1 - y) * 255 / h1;
+				else if (y > h2)	r = (y - h2) * 255 / h1;
+				if		(y < h1)	g = (y     ) * 255 / h1;
+				else if (y < h2)	g = (h2 - y) * 255 / h1;
+				if		(y > h2)	b = (h3 - y) * 255 / h1;
+				else if (y > h1)	b = (y - h1) * 255 / h1;
+
+				colorint color[COLOR_LEN];
+				BC->putpixel(x, y, make_color(color, r, g, b));
+			}
+		}
+	}
+
 	BC->load(filename+"_added");
 	if(apply_gauss_after_bg){
 		LC->filter(kernel_gauss, true);
