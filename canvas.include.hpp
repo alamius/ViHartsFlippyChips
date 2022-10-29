@@ -4,6 +4,7 @@
 #include "include/canvas/color.hpp"
 #include "include/canvas/Vector.hpp"
 
+extern colorint BLACK[COLOR_LEN];
 extern colorint WHITE[COLOR_LEN];
 extern colorint BLUE[COLOR_LEN];
 extern colorint CYAN[COLOR_LEN];

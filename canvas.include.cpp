@@ -4,6 +4,7 @@
 #include "include/canvas/color.hpp"
 #include "include/canvas/Vector.hpp"
 
+colorint BLACK[COLOR_LEN];
 colorint WHITE[COLOR_LEN];
 colorint BLUE[COLOR_LEN];
 colorint CYAN[COLOR_LEN];
@@ -13,6 +14,7 @@ colorint YELLOW[COLOR_LEN];
 colorint RED[COLOR_LEN];
 colorint TRANSPARENT[COLOR_LEN];
 void colors_init(){
+	make_color(BLACK, 0, 0, 0);
 	make_color(BLUE, 0, 0, 255);
 	make_color(WHITE, 255, 255, 255);
 	make_color(CYAN, 0, 255, 255);
